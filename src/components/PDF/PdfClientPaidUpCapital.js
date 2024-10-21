@@ -11,7 +11,7 @@ import api from '../../constants/api';
     const { id } = useParams();
     
   const [companyaddressDetails, setCompanyAddressDetails] = useState();
-  const[directorNameDetails, setDirectorNameDetails]=useState();
+  const[directorNameDetails, setDirectorNameDetails]=useState([]);
   
 
  
@@ -26,16 +26,21 @@ import api from '../../constants/api';
       })
      
   };
+ 
   const getShareHolder = () => {
     api
       .post('/clients/getShareholdernamePdf', { company_id: id })
       .then((res) => {
-        setDirectorNameDetails(res.data.data);
+        if (Array.isArray(res.data.data)) {
+          setDirectorNameDetails(res.data.data);
+        } else {
+          setDirectorNameDetails([]); // Fallback to an empty array if it's not an array
+        }
       })
-    
+      .catch((err) => console.error(err));
   };
 
-
+console.log("qw",directorNameDetails)
   React.useEffect(() => {
     getCompanyData();
     getShareHolder();

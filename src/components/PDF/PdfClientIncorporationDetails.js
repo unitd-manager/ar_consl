@@ -14,7 +14,7 @@ const PdfClientIncorporationDetails = () => {
   const [companyaddressDetails, setCompanyAddressDetails] = useState();
   const [companycontactDetails, setCompanyContactDetails] = useState();
   const [companyDetails, setCompanyDetails] = useState();
-  const [companyshareDetails, setCompanyshareDetails] = useState();
+  const [companyshareDetails, setCompanyshareDetails] = useState({});
  
  
   // Gettind data from Company address
@@ -38,14 +38,13 @@ const PdfClientIncorporationDetails = () => {
      
   };
 
+
+  
   const getShareholderPdf = () => {
-    api
-      .post('/clients/getShareholdernamePdf', { company_id: id })
+    api.post('/clients/getShareholdernamePdf', { company_id: id })
       .then((res) => {
-        setCompanyshareDetails(res.data.data[0]);
-        console.log(res.data.data);
-      })
-      
+        setCompanyshareDetails(res.data.data[0] || {});
+      });
   };
 
   const getCompanyContactData = () => {
