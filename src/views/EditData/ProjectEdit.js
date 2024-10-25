@@ -89,7 +89,7 @@ const ProjectEdit = () => {
     api
       .post('/project/getProjectById', { project_id: id })
       .then((res) => {
-        setProjectDetail(res.data.data[0]);
+        setProjectDetail(res.data.data);
       })
       .catch(() => {});
   };

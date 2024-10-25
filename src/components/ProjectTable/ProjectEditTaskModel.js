@@ -50,7 +50,7 @@ const ProjectEditTaskModel = ({
         .post('/project/editTask', taskinsert)
         .then(() => {
           message('Record editted successfully', 'success');
-          //          window.location.reload();
+           window.location.reload();
         })
         .catch(() => {
           message('Unable to edit record.', 'error');
