@@ -1,55 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Button, Col, Input, Table, Card, CardBody } from 'reactstrap';
+import { Row, Button, Col, Input, Table, Card, CardBody, Label } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
-import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import { ToastContainer } from 'react-toastify';
+import ReactPaginate from 'react-paginate';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import ExportReport from '../../components/Report/ExportReport';
 
 function FormcsCompanyReport() {
-  const [formcsCompanyReport, setFormcsCompanyReport] = useState([]);
+  const [groupName, setGroupName] = useState(null);
+  const [userSearchData, setUserSearchData] = useState('');
+  const [companyName, setCompanyName] = useState('');
 
-
-  const [period, setPeriod] = useState({
-    month: null,
-    year: null,
-  });
-
-  const handleInputs = (e) => {
-    setPeriod({ ...period, [e.target.name]: e.target.value });
-  };
-
-  //const [selectedMonth, setSelectedMonth] = useState('');
-  
-  //GET MONTH NAME
-    /*const handleMonthChange = (event) => {
-      const selectedOption = event.target.options[event.target.selectedIndex];
-      const selectedLabel = selectedOption.textContent;
-      const selectedValue = selectedOption.value;
-  
-      setSelectedMonth({
-        label: selectedLabel,
-        value: selectedValue,
-      });
-    };*/
-
-    //Get data from Training table
   const getArReturnNotfiledCompanyReport = () => {
-    const selectedMonth = period.month;
     api
-      .get('/project/getFormcsCompanyReport', { params: { month: selectedMonth } })
+      .get('/project/getFormcsCompanyReport')
       .then((res) => {
-        setFormcsCompanyReport(res.data.data);
+        setGroupName(res.data.data);
+        setUserSearchData(res.data.data);
       })
       .catch(() => {
-        message('Project Data Not Found', 'info');
+        message('Company Data Not Found', 'info');
       });
   };
 
@@ -78,28 +55,27 @@ function FormcsCompanyReport() {
     
   ];
 
+  const handleSearch = () => {
+    const newData = groupName
+        .filter((y) => y.group_name === (y.group_name === '' ? y.group_name : companyName))
+    setUserSearchData(newData);
+
+  };
   useEffect(() => {
-    setTimeout(() => {
-      $('#example').DataTable({
-        pagingType: 'full_numbers',
-        pageLength: 20,
-        processing: true,
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'csv',
-            text: 'CSV',
-            className: 'shadow-none btn btn-primary',
-          },
-          {
-            extend: 'print',
-            text: 'Print',
-            className: 'shadow-none btn btn-primary',
-          },
-        ],
-      });
-    }, 1000);
+    getArReturnNotfiledCompanyReport();
   }, []);
+  const [page, setPage] = useState(0);
+
+  const employeesPerPage = 20;
+  const numberOfEmployeesVistited = page * employeesPerPage;
+  const displayEmployees = userSearchData.slice(
+    numberOfEmployeesVistited,
+    numberOfEmployeesVistited + employeesPerPage,
+  );
+  const totalPages = Math.ceil(userSearchData.length / employeesPerPage);
+  const changePage = ({ selected }) => {
+    setPage(selected);
+  };
 
   return (
     <div className="">
@@ -109,34 +85,30 @@ function FormcsCompanyReport() {
           <Col></Col>
           <Col></Col>
           <Col>
-            <Input type="select" name="month" onChange={handleInputs}>
-              <option value="">Select Month</option>
-              <option value="January Year End">January Year End</option>
-              <option value="February Year End">February Year End</option>
-              <option value="March Year End">March Year End</option>
-              <option value="April Year End">April Year End</option>
-              <option value="May Year End">May Year End</option>
-              <option value="June Year End">June Year End</option>
-              <option value="July Year End">July Year End</option>
-              <option value="August Year End">August Year End</option>
-              <option value="September Year End">September Year End</option>
-              <option value="October Year End">October Year End</option>
-              <option value="November Year End">November Year End</option>
-              <option value="December Year End">December Year End</option>
-            </Input>
+          <Input
+                  type="select"
+                  name="group_name"
+                  onChange={(e) => setCompanyName(e.target.value)}
+                >
+                  <option defaultValue="selected">Select Group Name</option>
+                  <option value="January Year End">January Year End</option>
+                  <option value="February Year End">February Year End</option>
+                  <option value="March Year End">March Year End</option>
+                  <option value="April Year End">April Year End</option>
+                  <option value="May Year End">May Year End</option>
+                  <option value="June Year End">June Year End</option>
+                  <option value="July Year End">July Year End</option>
+                  <option value="August Year End">August Year End</option>
+                  <option value="September Year End">September Year End</option>
+                  <option value="October Year End">October Year End</option>
+                  <option value="November Year End">November Year End</option>
+                  <option value="December Year End">December Year End</option>
+                </Input>
           </Col>
          
-          <Col md="2">
-            <Button
-              color="primary"
-              className="shadow-none"
-              onClick={() => {
-                getArReturnNotfiledCompanyReport();
-              }}
-            >
-              Go
-            </Button>
-          </Col>
+          <Col md="1" className='mt-3'>
+              <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>Go</Button>
+            </Col>
         </Row>
       </div>
 
@@ -145,9 +117,9 @@ function FormcsCompanyReport() {
       </div>
       <div className="card p-2 shadow-none mt-0">
         <Row>
-          <Col>
-            <b>Month:</b> &nbsp; <span>{period.month}</span>
-          </Col>
+        <Col md="3">
+              <Label><b> Group Name:</b> {companyName}</Label>
+            </Col>
         
         </Row>
       </div>
@@ -155,8 +127,8 @@ function FormcsCompanyReport() {
       <Card>
         <CardBody>
           <Row>
-            <Col>
-              <ExportReport columns={columns} data={formcsCompanyReport} />
+          <Col>
+              <ExportReport columns={columns} data={userSearchData} /> 
             </Col>
           </Row>
         </CardBody>
@@ -171,15 +143,15 @@ function FormcsCompanyReport() {
               </tr>
             </thead>
             <tbody>
-              {formcsCompanyReport &&
-                formcsCompanyReport.map((res, index) => {
-                  return (
-                    <tr key={res.company_id}>
+            {displayEmployees &&
+              displayEmployees.map((element, index) => {
+                return (
+                    <tr key={element.company_id}>
                       <td>{index + 1}</td>
-                      <td>{res.company_name}</td>
-                      <td>{res.project_title}</td>
-                      <td>{res.task_title}</td>
-                      <td>{res.due_date}</td>
+                      <td>{element.company_name}</td>
+                      <td>{element.project_title}</td>
+                      <td>{element.task_title}</td>
+                      <td>{element.due_date}</td>
                       
                     </tr>
                   );
@@ -195,6 +167,17 @@ function FormcsCompanyReport() {
               </tr>
             </tbody>
           </Table>
+          <ReactPaginate
+            previousLabel="Previous"
+            nextLabel="Next"
+            pageCount={totalPages}
+            onPageChange={changePage}
+            containerClassName="navigationButtons"
+            previousLinkClassName="previousButton"
+            nextLinkClassName="nextButton"
+            disabledClassName="navigationDisabled"
+            activeClassName="navigationActive"
+          />
         </CardBody>
       </Card>
     </div>
