@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -28,7 +29,12 @@ const Header = () => {
   const isDarkMode = useSelector((state) => state.customizer.isDark);
   const topbarColor = useSelector((state) => state.customizer.topbarBg);
   const dispatch = useDispatch();
-
+  const logout=()=>{
+    localStorage.clear()
+    setTimeout(()=>{
+      window.location.reload()
+    },200)
+  }
   return (
     <Navbar
       color={topbarColor}
@@ -85,57 +91,12 @@ const Header = () => {
         {/******************************/}
         {/**********Mega DD**********/}
         {/******************************/}
-        <UncontrolledDropdown className="mega-dropdown mx-1">
-          <DropdownToggle className="bg-transparent border-0" color={topbarColor}>
-            <Icon.Grid size={18} />
-          </DropdownToggle>
-          <DropdownMenu>
-            <MegaDD />
-          </DropdownMenu>
-        </UncontrolledDropdown>
-        <UncontrolledDropdown>
-          <DropdownToggle color={topbarColor}>
-            <Icon.Bell size={18} />
-          </DropdownToggle>
-          <DropdownMenu className="ddWidth">
-            <DropdownItem header>
-              <span className="mb-0">Notifications</span>
-            </DropdownItem>
-            <DropdownItem divider />
-            <SimpleBar style={{ maxHeight: '350px' }}>
-              <NotificationDD />
-            </SimpleBar>
-            <DropdownItem divider />
-            <div className="p-2 px-3">
-              <Button color="primary" size="sm" block>
-                Check All
-              </Button>
-            </div>
-          </DropdownMenu>
-        </UncontrolledDropdown>
+      
+          
         {/******************************/}
         {/**********Message DD**********/}
         {/******************************/}
-        <UncontrolledDropdown className="mx-1">
-          <DropdownToggle color={topbarColor}>
-            <MessageSquare size={18} />
-          </DropdownToggle>
-          <DropdownMenu className="ddWidth">
-            <DropdownItem header>
-              <span className="mb-0">Messages</span>
-            </DropdownItem>
-            <DropdownItem divider />
-            <SimpleBar style={{ maxHeight: '350px' }}>
-              <MessageDD />
-            </SimpleBar>
-            <DropdownItem divider />
-            <div className="p-2 px-3">
-              <Button color="primary" size="sm" block>
-                Check All
-              </Button>
-            </div>
-          </DropdownMenu>
-        </UncontrolledDropdown>
+        
         {/******************************/}
         {/**********Profile DD**********/}
         {/******************************/}
@@ -144,9 +105,9 @@ const Header = () => {
             <img src={user1} alt="profile" className="rounded-circle" width="30" />
           </DropdownToggle>
           <DropdownMenu className="ddWidth">
-            <ProfileDD />
+            
             <div className="p-2 px-3">
-              <Button color="danger" size="sm">
+              <Button color="danger" onClick={logout} size="sm">
                 Logout
               </Button>
             </div>

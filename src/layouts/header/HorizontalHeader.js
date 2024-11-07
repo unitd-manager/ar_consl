@@ -5,16 +5,15 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
   Button,
   Container,
 } from 'reactstrap';
-import { Bell, MessageSquare, Grid } from 'react-feather';
+import { Grid } from 'react-feather';
 import { useSelector, useDispatch } from 'react-redux';
-import SimpleBar from 'simplebar-react';
-import MessageDD from './MessageDD';
+// import SimpleBar from 'simplebar-react';
+// import MessageDD from './MessageDD';
 import MegaDD from './MegaDD';
-import NotificationDD from './NotificationDD';
+// import NotificationDD from './NotificationDD';
 import user1 from '../../assets/images/users/user1.jpg';
 
 import { ToggleMobileSidebar } from '../../store/customizer/CustomizerSlice';
@@ -27,7 +26,12 @@ const HorizontalHeader = () => {
   const topbarColor = useSelector((state) => state.customizer.topbarBg);
   const isMobileSidebar = useSelector((state) => state.customizer.isMobileSidebar);
   const dispatch = useDispatch();
-
+  const logout=()=>{
+    localStorage.clear()
+    setTimeout(()=>{
+      window.location.reload()
+    },200)
+  }
   return (
     <Navbar
       color={topbarColor}
@@ -70,49 +74,7 @@ const HorizontalHeader = () => {
         {/******************************/}
         {/**********Notification DD**********/}
         {/******************************/}
-        <UncontrolledDropdown>
-          <DropdownToggle color={topbarColor}>
-            <Bell size={18} />
-          </DropdownToggle>
-          <DropdownMenu className="ddWidth" end>
-            <DropdownItem header>
-              <span className="mb-0">Notifications</span>
-            </DropdownItem>
-            <DropdownItem divider />
-            <SimpleBar style={{ maxHeight: '350px' }}>
-              <NotificationDD />
-            </SimpleBar>
-            <DropdownItem divider />
-            <div className="p-2 px-3">
-              <Button color="primary" size="sm" block>
-                Check All
-              </Button>
-            </div>
-          </DropdownMenu>
-        </UncontrolledDropdown>
-        {/******************************/}
-        {/**********Message DD**********/}
-        {/******************************/}
-        <UncontrolledDropdown className="mx-1">
-          <DropdownToggle color={topbarColor}>
-            <MessageSquare size={18} />
-          </DropdownToggle>
-          <DropdownMenu className="ddWidth" end>
-            <DropdownItem header>
-              <span className="mb-0">Messages</span>
-            </DropdownItem>
-            <DropdownItem divider />
-            <SimpleBar style={{ maxHeight: '350px' }}>
-              <MessageDD />
-            </SimpleBar>
-            <DropdownItem divider />
-            <div className="p-2 px-3">
-              <Button color="primary" size="sm" block>
-                Check All
-              </Button>
-            </div>
-          </DropdownMenu>
-        </UncontrolledDropdown>
+        
         {/******************************/}
         {/**********Profile DD**********/}
         {/******************************/}
@@ -124,7 +86,7 @@ const HorizontalHeader = () => {
             <ProfileDD />
 
             <div className="p-2 px-3">
-              <Button color="danger" size="sm">
+              <Button color="danger" onClick={logout} size="sm">
                 Logout
               </Button>
             </div>
