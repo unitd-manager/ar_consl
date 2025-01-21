@@ -158,6 +158,8 @@ const IR8AReport = Loadable(lazy(() => import('../views/smartconTables/IR8ARepor
 
 // Details Table
 const ClientDetailsTable = Loadable(lazy(() => import('../views/detailTable/ClientDetails')));
+const InvoiceDetailsTable = Loadable(lazy(() => import('../views/detailTable/InvoiceDetails')));
+
 const TenderDetailsTable = Loadable(lazy(() => import('../views/detailTable/TenderDetails')));
 const TimesheetDetailsTable = Loadable(lazy(() => import('../views/detailTable/TimesheetDetails')));
 const ProjectDetails = Loadable(lazy(() => import('../views/detailTable/ProjectDetails')));
@@ -216,6 +218,7 @@ const ProjectEdit = Loadable(lazy(() => import('../views/EditData/ProjectEdit'))
 const ClientEdit = Loadable(lazy(() => import('../views/EditData/ClientEdit')));
 const SectionEdit = Loadable(lazy(() => import('../views/EditData/SectionEdit')));
 const LoanEdit = Loadable(lazy(() => import('../views/EditData/LoanEdit')));
+const InvoiceEdit = Loadable(lazy(() => import('../views/EditData/InvoiceEdit')));
 const LeavesEdit = Loadable(lazy(() => import('../views/EditData/LeavesEdit')));
 const JobInformationEdit = Loadable(lazy(() => import('../views/EditData/JobInformationEdit')));
 const StaffEdit = Loadable(lazy(() => import('../views/EditData/StaffEdit')));
@@ -276,7 +279,7 @@ const Routernew = () => {
           <Route path="/sectionEdit/:id" name="sectiondata" element={<SectionEdit />}></Route>
           <Route path="/LeavesEdit/:id" name="leavedata" element={<LeavesEdit />}></Route>
 
-         
+          <Route path="/InvoiceEdit/:id" name="invoicedata" element={<InvoiceEdit />}></Route>
           <Route path="/LoanEdit/:id" name="loandata" element={<LoanEdit />}></Route>
                     <Route
             path="/JobInformationEdit/:id"
@@ -397,6 +400,8 @@ const Routernew = () => {
           <Route path="/Tender" name="tenderdata" element={<TenderTable />}></Route>
           <Route path="/Client" name="clienttdata" element={<ClientTable />}></Route>
           <Route path="/ClientDetails" name="clientdetailsdata" element={<ClientDetailsTable />}></Route>
+          <Route path="/InvoiceDetails" name="invoicedetailsdata" element={<InvoiceDetailsTable />}></Route>
+
           <Route path="/Timesheet" name="timesheetdata" element={<TimesheetTable />}></Route>
           <Route path="/TenderDetails" name="tenderdetailsdata" element={<TenderDetailsTable />}></Route>
           <Route

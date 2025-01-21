@@ -56,7 +56,7 @@ const ProjectEdit = () => {
     { id: '1', name: 'Task' },
     { id: '2', name: 'Employee Linked' },
     { id: '3', name: 'Quotations' },
-    { id: '4', name: 'Finance' },
+    { id: '4', name: 'Invocie' },
     { id: '5', name: 'Attachments' },
   ];
   const toggle = (tab) => {

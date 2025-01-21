@@ -324,8 +324,8 @@ console.log("qw",directorNameDetails)
         '\n\n',
         
         {
-          text: `We also fully understand and aware that the shareholdersâ€™ liability and obligation to pay up the said amount as stated above become effective immediately upon lodging the resolution with ACRA. 
-              We shall further ensure that the said amounts be deposited into the Companyâ€™s account as soon as possible.`,
+          text: `We also fully understand and aware that the shareholders liability and obligation to pay up the said amount as stated above become effective immediately upon lodging the resolution with ACRA. 
+              We shall further ensure that the said amounts be deposited into the Company's account as soon as possible.`,
           style: 'textSize',
           bold: false,
           margin: [10, 0, 0, 0],

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import { Row, Col, Button, CardTitle, Table, Form } from 'reactstrap';
 import PropTypes from 'prop-types';
 import FinanceInvoiceData from '../finance/FinanceInvoiceData';
@@ -33,6 +33,8 @@ export default function FinanceTab({ projectDetail }) {
   const [editReceiptModal, setEditReceiptModal] = useState(false);
   const [editReceiptDataModal, setReceiptDataModal] = useState(false);
   const [invoiceDatas, setInvoiceDatas] = useState({});
+
+  console.log('projec',supplierAmount,subconAmount)
   const getInvoiceById = () => {
     api
       .post('/invoice/getProjectInvoiceById', { project_id: id })
@@ -110,7 +112,7 @@ export default function FinanceTab({ projectDetail }) {
   //get receipt
   const getReceiptCancel = () => {
     api
-      .post('/invoice/getReceiptCancel', { order_id: id })
+      .post('/invoice/getReceiptCancel', {project_id: id })
       .then((res) => {
         setCancelReceipt(res.data.data);
       })
@@ -156,7 +158,7 @@ export default function FinanceTab({ projectDetail }) {
       <Row>
         <CardTitle tag="h4" className="border-bottom bg-secondary p-2 mb-0 text-white">
           {' '}
-          FINANCE{' '}
+          Invocie{' '}
         </CardTitle>
       </Row>
       <br />
@@ -168,7 +170,7 @@ export default function FinanceTab({ projectDetail }) {
         setFinanceModal={setFinanceModal}
         getOrdersById={getOrdersById}
       />
-      <Row className="mb-4">
+      {/* <Row className="mb-4">
         {!orderId && (
           <Col md="3">
             {' '}
@@ -194,7 +196,7 @@ export default function FinanceTab({ projectDetail }) {
             </Link>
           </Col>
         )}
-      </Row>
+      </Row> */}
       <Row>
         <Col lg="6">
           <CardTitle tag="h4" className="border-bottom p-3 mb-0">
@@ -234,60 +236,7 @@ export default function FinanceTab({ projectDetail }) {
             <br />
           </Table>
         </Col>
-        <Col lg="6">
-          <CardTitle tag="h4" className="border-bottom p-3 mb-0">
-            {' '}
-            Account Payables{' '}
-          </CardTitle>
-          <Table bordered>
-            <thead>
-              <tr>
-                <th colSpan="3" className="bold">
-                  Balance Payables :
-                </th>
-              </tr>
-              <tr>
-                <th className="bold">Description</th>
-                <th className="bold">Invoice Received</th>
-                <th className="bold">Amount Paid</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Supplier invoice amount </td>
-                <td>
-                  {' '}
-                  <span>{supplierAmount && supplierAmount.payAmount} </span>{' '}
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>Total Payments Made </td>
-                <td> </td>
-                <td>
-                  {' '}
-                  <span>{supplierAmount && supplierAmount.paidAmount} </span>{' '}
-                </td>
-              </tr>
-              <tr>
-                <td>Subcon invoice amount </td>
-                <td>
-                  {' '}
-                  <span>{subconAmount && subconAmount.payAmount} </span>{' '}
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>Total Payments Made</td>
-                <td> </td>
-                <td>
-                  {' '}
-                  <span>{subconAmount && subconAmount.paidAmount} </span>{' '}
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </Col>
+     
       </Row>
       <FinanceInvoiceData
         editInvoiceData={editInvoiceData}
@@ -299,7 +248,7 @@ export default function FinanceTab({ projectDetail }) {
         <FinanceReceiptData
           editCreateReceipt={editCreateReceipt}
           setEditCreateReceipt={setEditCreateReceipt}
-          orderId={orderId}
+          orderId={id}
         />
       )}
 

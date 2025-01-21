@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import {
+  Button,
+
+} from 'reactstrap';
+import * as Icon from 'react-feather';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
+import { Link} from 'react-router-dom';
 import moment from 'moment';
 import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons/js/buttons.html5';
@@ -63,6 +70,13 @@ const InvoiceData = () => {
   const columns = [
     {
       name: '#',
+      grow: 0,
+      wrap: true,
+      width: '4%',
+    },
+
+    {
+      name: 'Edit',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -135,8 +149,15 @@ const InvoiceData = () => {
 
         <CommonTable 
         loading={loading}
-        title="Invoice List" >
-
+        title="Invoice List" 
+          Button={
+            <Link to="/InvoiceDetails">
+              <Button color="primary" className="shadow-none">
+                Add New
+              </Button>
+            </Link>
+          }
+        >
         <thead>
             <tr>
               {columns.map((cell) => {
@@ -150,6 +171,11 @@ const InvoiceData = () => {
                 return (
                   <tr key={element.invoice_id}>
                     <td>{index + 1}</td>
+                      <td>
+                                          <Link to={`/InvoiceEdit/${element.invoice_id}`}>
+                                            <Icon.Edit2 />
+                                          </Link>
+                                        </td>
                     <td>{element.invoice_code}</td>
                     <td>{element.project_title}</td>
                     <td>{element.company_name}</td>

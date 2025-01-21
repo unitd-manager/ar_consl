@@ -31,7 +31,7 @@ const FinanceReceiptData = ({ editCreateReceipt, setEditCreateReceipt,orderId })
   const [totalAmount, setTotalAmount] = useState(0);
   const [createReceipt, setCreateReceipt] = useState({
     amount: 0,
-    order_id:id,
+    project_id:id,
     receipt_status:"Paid",
     receipt_date:moment(),
     receipt_code: '',
@@ -200,7 +200,7 @@ const FinanceReceiptData = ({ editCreateReceipt, setEditCreateReceipt,orderId })
 
   //Getting receipt data by order id
   const getinvoiceReceipt = () => {
-    api.post('/invoice/getInvoiceReceiptById', { order_id: orderId }).then((res) => {
+    api.post('/invoice/getInvoiceReceiptById', { project_id: orderId }).then((res) => {
       const datafromapi = res.data.data
       datafromapi.forEach(element => {
         element.remainingAmount = element.invoice_amount - element.prev_amount
