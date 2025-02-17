@@ -6,7 +6,9 @@ import PdfClientPaidUpCapital from '../PDF/PdfClientPaidUpCapital';
 import PdfClientContract from '../PDF/PdfClientContract';
 import PdfActivity from '../PDF/PdfActivity';
 import PdfClientEp200 from '../PDF/PdfClientEp200';
+import PdfResolution from '../PDF/Pdf Resolution';
 import PdfClientRickAssessment from '../PDF/PdfClientRickAssessment';
+
 import ComponentCardV2 from '../ComponentCardV2';
 
 export default function ClientButtonPdf({ backToList }) {
@@ -36,6 +38,9 @@ export default function ClientButtonPdf({ backToList }) {
             </Col>
             <Col>
               <PdfClientRickAssessment></PdfClientRickAssessment>
+            </Col>
+            <Col>
+              <PdfResolution></PdfResolution>
             </Col>
 
             <Col>
