@@ -185,6 +185,7 @@ const EmployeeDetailsTable = Loadable(lazy(() => import('../views/detailTable/Em
 const EmployeeDetailsData = Loadable(
   lazy(() => import('../views/detailTable/EmployeeDetailsData')),
 );
+const SmartAttendance = Loadable(lazy(() => import('../views/smartconTables/SmartAttendance')));
 const PayrollManagementDetails = Loadable(
   lazy(() => import('../views/detailTable/PayrollManagementDetails')),
 );
@@ -227,6 +228,7 @@ const ValueListEdit = Loadable(lazy(() => import('../views/EditData/ValueListEdi
 const TimesheetEdit = Loadable(lazy(() => import('../views/EditData/TimesheetEdit')));
 const SettingEdit = Loadable(lazy(() => import('../views/EditData/SettingEdit')));
 const UserGroupEdit = Loadable(lazy(() => import('../views/EditData/UserGroupEdit')));
+const SmartAttendanceEdit = Loadable(lazy(() => import('../views/EditData/SmartAttendanceEdit')));
 
 //Reports
 const ProjectReportTable = Loadable(lazy(() => import('../views/Reports/ProjectReport')));
@@ -278,7 +280,7 @@ const Routernew = () => {
           <Route path="/clientEdit/:id" name="clientdata" element={<ClientEdit />}></Route>
           <Route path="/sectionEdit/:id" name="sectiondata" element={<SectionEdit />}></Route>
           <Route path="/LeavesEdit/:id" name="leavedata" element={<LeavesEdit />}></Route>
-
+          <Route path="/SmartAttendanceEdit/:id" name="smartattendancedata" element={<SmartAttendanceEdit />}></Route>  
           <Route path="/InvoiceEdit/:id" name="invoicedata" element={<InvoiceEdit />}></Route>
           <Route path="/LoanEdit/:id" name="loandata" element={<LoanEdit />}></Route>
                     <Route
@@ -471,6 +473,7 @@ const Routernew = () => {
             name="employeedetailsdata"
             element={<EmployeeDetailsData />}
           ></Route>
+          <Route path="/SmartAttendance" name="smartattendance" element={<SmartAttendance/>}></Route>
           <Route
             path="/PayrollManagement"
             name="payrollmanagementdata"

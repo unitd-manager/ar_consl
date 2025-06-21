@@ -76,7 +76,11 @@ useEffect(()=>{
                   onClick={`/EmployeeDetailsData/${blg.employee_id_duplicate}`}
                   image={Image}
                   id={blg.employee_id_duplicate}
-                  title={blg.first_name.charAt(0).toUpperCase() + blg.first_name.slice(1)}
+                  title={
+  blg.first_name
+    ? blg.first_name.charAt(0).toUpperCase() + blg.first_name.slice(1)
+    : 'No Name'
+}
                   dateOfBirth={blg.date_of_birth}
                   empId={blg.employee_id_duplicate}
                   projectDesignation={blg.project_designation}

@@ -155,11 +155,18 @@ useEffect(()=>{getMaxEmpcode();},[])
                 <Row>
                   <Col md="12">
                     <Label>Status  <span style={{color: 'red'}}>*</span></Label>
-                    <Input name="status" value={employeeData && employeeData.status} onChange={handleInputs} type="select">
-                        <option selected="selected" value="Current">Current</option>
-                        <option value="Archive">Archive</option>
-                        <option value="Cancel">Cancel</option>
-                    </Input>
+                    <Input
+  name="status"
+  value={employeeData && employeeData.status}
+  onChange={handleInputs}
+  type="select"
+>
+  <option value="">Please Select</option> {/* This is the default */}
+  <option value="Current">Current</option>
+  <option value="Archive">Archive</option>
+  <option value="Cancel">Cancel</option>
+</Input>
+
                 </Col>
                 </Row>
                 <Row>
