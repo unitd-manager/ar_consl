@@ -58,7 +58,7 @@ const insertTrainingDetailData = () => {
     message('Network connection error.', 'error');
   });
 }else {
-message('Please fill all required fields.', 'error');
+message('Please fill all required fields.', 'warning');
 }
 };
   useEffect(() => {
@@ -76,7 +76,7 @@ message('Please fill all required fields.', 'error');
               <FormGroup>
                 <Row>
                 <Col md="12">
-                    <Label>Title</Label>
+                    <Label>Title<span className='required'>*</span></Label>
                     <Input type="text"
                       onChange={handleInputs}
                       value={trainingDetails && (trainingDetails.title)}

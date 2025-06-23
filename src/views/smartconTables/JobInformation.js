@@ -174,7 +174,7 @@ const JobInformation = () => {
                       <td>{element.spass_no}</td>
                       <td>{element.fin_no}</td>
                       <td>{element.nric_no}</td>
-                      <td>{element.date ? moment(element.date).format('YYYY-MM-DD') : ''}</td>
+                      <td>{element.date_of_birth ? moment(element.date).format('YYYY-MM-DD') : ''}</td>
                       <td>{element.basic_pay}</td>
                       <td>{element.citizen}</td>
                       <td>{element.job_information_id}</td>

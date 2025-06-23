@@ -47,7 +47,7 @@ const JobInformationDetails = () => {
         }, 300);
       })
       .catch(() => {
-        message('Unable to edit record.', 'error');
+        message('Please fill all required fields.', 'warning');
       });
      
   };
@@ -64,7 +64,7 @@ const JobInformationDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  <Label>Employee Name </Label>
+                  <Label>Employee Name<span className='required'>*</span> </Label>
                   <Input
                     type="select"
                     name="employee_id"

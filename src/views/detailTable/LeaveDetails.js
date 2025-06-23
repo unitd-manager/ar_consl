@@ -67,7 +67,7 @@ const navigate = useNavigate();
               <FormGroup>
                 <Row>
                   <Col md="6">
-                    <Label>employee_name<span className='required'> *</span></Label>
+                    <Label>Employee Name<span className='required'> *</span></Label>
                     <Input
                       type="select"
                       name="employee_id"
