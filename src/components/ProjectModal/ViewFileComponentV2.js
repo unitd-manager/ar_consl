@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import PropTypes from 'prop-types';
 import * as Icon from 'react-feather';
-import message from '../Message';
+//import message from '../Message';
 import api from '../../constants/api';
 
 function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
@@ -38,11 +38,14 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
           .then((res) => {
             console.log(res);
             Swal.fire('Deleted!', 'Media has been deleted.', 'success');
+            setTimeout(() => {
+              window.location.reload()
+          }, 400);
             setUpdate(!update)
-            //window.location.reload();
+            
           })
           .catch(() => {
-            message('Unable to Delete Media', 'info');
+           // message('Unable to Delete Media', 'info');
           });
       }
     });
@@ -51,7 +54,23 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
   useEffect(() => {
     getFiles();
   }, [update]);
-
+  
+  useEffect(() => {
+    getFiles();
+  }, []);
+  const getHostnameUrl = () => {
+    const { hostname } = window.location;
+    if (hostname === 'pyramid.unitdtechnologies.com') {
+      return 'https://pyramid.unitdtechnologies.com/storage/uploads/';
+    }
+    if (hostname === 'pyramidtest.unitdtechnologies.com') {
+      return 'http://43.228.126.245/pyramidTestapi/storage/uploads/';
+    }
+    if (hostname === 'localhost.com') {
+      return 'http://localhost.com/storage/uploads/';
+    }
+    return '';
+  };
   return (
     <>
       <table style={tableStyle}>
@@ -67,13 +86,13 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
               return (
                 <tr key={res.media_id}>
                   <td style={tableStyle}>
-                    <a
-                      href={`http://43.228.126.245/audit-crm-api/storage/uploads/${res.name}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {res.name}
-                    </a>
+                  <a
+                    href={`${getHostnameUrl()}${res.name}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {res.name}
+                  </a>
                   </td>
                   <td style={tableStyle}>
                     <button

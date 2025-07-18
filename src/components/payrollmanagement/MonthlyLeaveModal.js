@@ -44,7 +44,7 @@ function ViewMontlyLeaveModal({ monthlyLeaveModal, setMonthlyLeaveModal, monthly
     },
   ];
 
-return (
+  return (
     <>
       <Modal isOpen={monthlyLeaveModal}>
         <ModalHeader>Montly Leave History</ModalHeader>

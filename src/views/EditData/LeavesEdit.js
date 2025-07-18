@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  Button,
-  TabPane,
-  TabContent,
-  Nav,
-  NavItem,
-  NavLink,
-} from 'reactstrap';
+import React, { useEffect, useState, useContext} from 'react';
+import { Row, Col, Form, FormGroup, Button, TabPane, TabContent } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 import { ToastContainer } from 'react-toastify';
 import * as Icon from 'react-feather';
 import AttachmentModalV2 from '../../components/tender/AttachmentModalV2';
@@ -21,11 +11,16 @@ import LeavePastHistory from '../../components/LeaveTable/LeavePastHistory';
 import ComponentCard from '../../components/ComponentCard';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import '../form-editor/editor.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../form-editor/editor.scss'; 
 import api from '../../constants/api';
 import LeaveMainDetails from '../../components/LeaveTable/LeaveMainDetails';
 import ApiButton from '../../components/ApiButton';
+import Tab from '../../components/Project/Tab';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const LeavesEdit = () => {
   //Const Variables
@@ -39,20 +34,41 @@ const LeavesEdit = () => {
     modelType: '',
   });
   const [difference, setDifference] = useState();
+  const [update, setUpdate] = useState(false);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
 
   // Button Save Apply Back List
   const applyChanges = () => {};
   const backToList = () => {
     navigate('/Leave');
   };
-  // TOGGLE Tab
-  const toggle = (tab) => {
-    if (activeTab !== tab) setActiveTab(tab);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
   };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+  // const companyhandleInputs = (e) => {
+  //   setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
+  // };
+
+  // Start for tab refresh navigation #Renuka 1-06-23
+  const tabs = [
+
+      { id: '1', name:'Attachment' },
+      { id: '2', name:'Past Leave History' },
+    ];
+    
+  const toggle = (tab) => {
+    setActiveTab(tab);
+  };
+  // End for tab refresh navigation #Renuka 1-06-23
+
   //  get Leave Past history
   const LeavePastHistoryById = (empId) => {
     api
@@ -64,14 +80,6 @@ const LeavesEdit = () => {
         message('leaves Data Not Found', 'info');
       });
   };
-
-  // const fromMonth=moment(leavesDetails.from_date).format('MM');
-  // const toMonth=moment(leavesDetails.to_date).format('MM');
-  // const diff=(fromMonth)-(toMonth);
-
-  // console.log(diff)
-  // console.log ('fromMonth',fromMonth);
-  // console.log('toMonth',toMonth);
 
   // Get Leaves By Id
   const editLeavesById = () => {
@@ -99,121 +107,158 @@ const LeavesEdit = () => {
     setDataForAttachment({
       modelType: 'attachment',
     });
-    console.log('inside DataForAttachment');
   };
+
+ 
 
   //Logic for edit data in db
   const editLeavesData = () => {
-    if (
-      leavesDetails.from_date &&
-      leavesDetails.to_date &&
-      leavesDetails.leave_type &&
-      leavesDetails.no_of_days
-    ) {
-      api
-        .post('/leave/editleave', leavesDetails)
-        .then(() => {
-          message('Record editted successfully', 'success');
-         
-        })
-        .catch(() => {
-          message('Unable to edit record.', 'error');
-        });
-    } else {
-      message('Please fill all required fields', 'warning');
+    if (!leavesDetails.no_of_days) {
+      message('Please fill No of Days (Current Month)', 'error');
+      return; // Stop further processing
     }
+    if (new Date(leavesDetails.to_date) >= new Date(leavesDetails.from_date)) {
+      
+      if (
+        leavesDetails.from_date!=='' &&
+        leavesDetails.to_date!=='' &&
+        leavesDetails.leave_type!=='' 
+       
+      ) {
+        leavesDetails.modification_date = creationdatetime;
+        leavesDetails.modified_by= loggedInuser.first_name;
+        api
+          .post('/leave/editleave', leavesDetails)
+          .then(() => {
+            message('Record editted successfully', 'success');
+                   
+          })
+          .catch(() => {
+            message('Unable to edit record.', 'error');
+          });
+      } else {
+        message('Please fill all required fields', 'error');
+      }
+    }else{
+      message('The To date should be the future date of From date', 'error');
+     
+    }
+    // } else {
+    //   message('Please fill No Of Days(current Month)', 'warning');
+    // }
   };
 
   useEffect(() => {
-    editLeavesById()
+    editLeavesById();
   }, [id]);
-
+  const deleteLeaveData = () => {
+    Swal.fire({
+      title: `Are you sure? ${id}`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api
+          .post('/leave/deleteLeave', { leave_id: id })
+          .then(() => {
+            Swal.fire('Deleted!', 'Your Leave has been deleted.', 'success');
+            //window.location.reload();
+          });
+      }
+    });
+  };
+  
+  
   return (
     <>
-      {/* BreadCrumbs */}
+     <BreadCrumbs heading={leavesDetails && leavesDetails.employee_name} />
+      {/* BreadCrumbs 
       <BreadCrumbs heading={leavesDetails && leavesDetails.employee_name} />
-      {/* Button */}
-      <ApiButton  editData={editLeavesData}
-        navigate={navigate}
-        applyChanges={applyChanges}
-        backToList={backToList} module="Leave"></ApiButton>
-      {/* <LeaveButton
-        
-      ></LeaveButton> */}
+      Button */}
+      <Form>
+        <FormGroup>
+          <ToastContainer></ToastContainer>
+          
+            <ApiButton
+              editData={editLeavesData}
+              navigate={navigate}
+              applyChanges={applyChanges}
+              backToList={backToList}
+              module="Leave"
+              deleteData={deleteLeaveData}
+            ></ApiButton>
+          
+        </FormGroup>
+      </Form>
 
       {/* Main Details */}
       <LeaveMainDetails
         handleInputs={handleInputs}
         leavesDetails={leavesDetails}
         difference={difference}
+
       ></LeaveMainDetails>
 
       {/* Nav tab */}
-      <ComponentCard>
+      <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={activeTab === '1' ? 'active' : ''}
-              onClick={() => {
-                toggle('1');
-              }}
-            >
-              Attachment
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={activeTab === '2' ? 'active' : ''}
-              onClick={() => {
-                toggle('2');
-              }}
-            >
-              Past Leave HIstory
-            </NavLink>
-          </NavItem>
-        </Nav>
+
+        <Tab toggle={toggle} tabs={tabs} />
+
         <TabContent className="p-4" activeTab={activeTab}>
           {/* Attachment */}
           <TabPane tabId="1">
             <Form>
               <FormGroup>
-                <ComponentCard title="Attachments">
-                  <Row>
-                    <Col xs="12" md="3" className="mb-3">
-                      <Button
-                        className="shadow-none"
-                        color="primary"
-                        onClick={() => {
-                          setRoomName('Leave');
-                          setFileTypes(['JPG', 'PNG', 'GIF', 'PDF']);
-                          dataForAttachment();
-                          setAttachmentModal(true);
-                        }}
-                      >
-                        <Icon.File className="rounded-circle" width="20" />
-                      </Button>
-                    </Col>
-                  </Row>
-                  <AttachmentModalV2
-                    moduleId={id}
-                    attachmentModal={attachmentModal}
-                    setAttachmentModal={setAttachmentModal}
-                    roomName={RoomName}
-                    fileTypes={fileTypes}
-                    altTagData="LeaveRelated Data"
-                    desc="LeaveRelated Data"
-                    recordType="RelatedPicture"
-                    mediaType={attachmentData.modelType}
-                  />
-                  <ViewFileComponentV2 moduleId={id} roomName="Leave" recordType="RelatedPicture" />
-                </ComponentCard>
+                <Row>
+                  <Col xs="12" md="3" className="mb-3">
+                    <Button
+                      className="shadow-none"
+                      color="primary"
+                      onClick={() => {
+                        setRoomName('Leave');
+                        setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+                        dataForAttachment();
+                        setAttachmentModal(true);
+                      }}
+                    >
+                      <Icon.File className="rounded-circle" width="20" />
+                    </Button>
+                  </Col>
+                </Row>
+                <AttachmentModalV2
+                  moduleId={id}
+                  attachmentModal={attachmentModal}
+                  setAttachmentModal={setAttachmentModal}
+                  roomName={RoomName}
+                  fileTypes={fileTypes}
+                  altTagData="LeaveRelated Data"
+                  desc="LeaveRelated Data"
+                  recordType="RelatedPicture"
+                  mediaType={attachmentData.modelType}
+                  update={update}
+                  setUpdate={setUpdate}
+                />
+                <ViewFileComponentV2
+                  moduleId={id}
+                  roomName="Leave"
+                  recordType="RelatedPicture"
+                  update={update}
+                  setUpdate={setUpdate}
+                />
               </FormGroup>
             </Form>
           </TabPane>
           {/* Past Leave history */}
           <TabPane tabId="2">
-            <LeavePastHistory PastleavesDetails={PastleavesDetails}></LeavePastHistory>
+            <LeavePastHistory
+              PastleavesDetails={PastleavesDetails}
+              leavesDetails={leavesDetails}
+            ></LeavePastHistory>
           </TabPane>
         </TabContent>
       </ComponentCard>

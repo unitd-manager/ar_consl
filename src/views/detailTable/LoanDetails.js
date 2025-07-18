@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
-
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
 
 const LoanDetails = () => {
-  //state variable
-  const [employee, setEmployee] = useState();
+  const [employee, setEmployee] = useState([]);
+  const { loggedInuser } = useContext(AppContext);
 
-  //Navigation and Parameter Constants
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
-  // Get Employee By Id
   const getEmployee = () => {
-    api
-      .get('/loan/TabEmployee')
+    api.get('/loan/TabEmployee')
       .then((res) => {
         setEmployee(res.data.data);
       })
@@ -31,32 +30,38 @@ const LoanDetails = () => {
     employee_id: '',
     amount: '',
     month_amount: '',
+    date:'',
+    status:'',
   });
 
-  //setting data in loanForms
   const handleLoanForms = (e) => {
     setLoanForms({ ...loanForms, [e.target.name]: e.target.value });
   };
 
-  //Logic for adding Loan in db
   const insertLoan = () => {
     if (loanForms.employee_id !== '' && loanForms.amount !== '' && loanForms.month_amount !== '') {
+      const loanDataForBackend = {
+        ...loanForms,
+        created_by: loggedInuser.first_name,
+        creation_date: creationdatetime,
+        date: moment().format('YYYY-MM-DD HH:mm:ss')
+      };
 
-      loanForms.date = moment()
       api
-        .post('/loan/insertLoan', loanForms)
+        .post('/loan/insertLoan', loanDataForBackend)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
+          const employeeId = loanForms.employee_id;
           message('Loan inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/LoanEdit/${insertedDataId}`);
+            navigate(`/LoanEdit/${insertedDataId}/${employeeId}`);
           }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
         });
     } else {
-      message('Please fill all required fields', 'warning');
+      message('Please fill all required fields', 'error');
     }
   };
 
@@ -76,41 +81,51 @@ const LoanDetails = () => {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Employee Name <span className="required"> *</span></Label>
+                      <Label>
+                        <span className="required"> *</span>
+                        Employee Name
+                      </Label>
                       <Input
                         type="select"
-                        name="employee_id"
                         onChange={handleLoanForms}
-                        value={loanForms && loanForms.employee_id}
+                        value={loanForms.employee_id}
+                        name="employee_id"
                       >
                         <option value="" selected>
                           Please Select
                         </option>
-                        {employee &&
-                          employee.map((ele) => {
-                            return <option value={ele.employee_id}>{ele.employee_name}</option>;
-                          })}
+                        {employee.map((ele) => (
+                          <option key={ele.employee_id} value={ele.employee_id}>
+                            {ele.employee_name}
+                          </option>
+                        ))}
                       </Input>
                     </FormGroup>
                   </Col>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Total Loan Amount<span className="required"> *</span></Label>
+                      <Label>
+                        <span className="required"> *</span>
+                        Total Loan Amount
+                      </Label>
                       <Input
                         type="number"
                         onChange={handleLoanForms}
-                        value={loanForms && loanForms.amount}
+                        value={loanForms.amount}
                         name="amount"
                       />
                     </FormGroup>
                   </Col>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Amount Payable(per month)<span className="required"> *</span></Label>
+                      <Label>
+                        <span className="required"> *</span>
+                        Amount Payable (per month)
+                      </Label>
                       <Input
                         type="number"
                         onChange={handleLoanForms}
-                        value={loanForms && loanForms.month_amount}
+                        value={loanForms.month_amount}
                         name="month_amount"
                       />
                     </FormGroup>
@@ -119,22 +134,23 @@ const LoanDetails = () => {
               </FormGroup>
               <FormGroup>
                 <Row>
-                  <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-                    <Button color="primary"
-                      onClick={() => {
-                        insertLoan();
-                      }}
+                  <div className="d-flex align-items-center gap-2">
+                    <Button
+                      color="primary"
+                      onClick={insertLoan}
                       type="button"
                       className="btn mr-2 shadow-none"
                     >
                       Save & Continue
                     </Button>
                     <Button
+                      className="shadow-none"
+                      color="dark"
                       onClick={() => {
-                        navigate(-1);
+                        if (window.confirm('Are you sure you want to cancel  \n  \n You will lose any changes made')) {
+                          navigate(-1);
+                        }
                       }}
-                      type="button"
-                      className="btn btn-dark shadow-none"
                     >
                       Cancel
                     </Button>
@@ -148,4 +164,5 @@ const LoanDetails = () => {
     </div>
   );
 };
+
 export default LoanDetails;

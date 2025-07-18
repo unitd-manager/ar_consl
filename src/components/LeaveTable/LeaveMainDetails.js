@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -8,11 +7,12 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
   LeaveMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     leavesDetails: PropTypes.object,
-    difference:PropTypes.object,
+    difference: PropTypes.any,
   };
+
   return (
     <>
-      <ComponentCard title="LeaveEdit">
+      <ComponentCard title="Leave Edit" creationModificationDate={leavesDetails}>
         <Form>
           <FormGroup>
             <Row>
@@ -27,14 +27,14 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                 <FormGroup>
                   <Label>Designation</Label>
                   <br />
-                  <span>{leavesDetails && leavesDetails.designation}</span>
+                  <span>{leavesDetails && leavesDetails.position}</span>
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
                   <Label>Applied Date</Label>
                   <Input
-                    type="Date"
+                    type="date"
                     onChange={handleInputs}
                     value={leavesDetails && moment(leavesDetails.date).format('YYYY-MM-DD')}
                     name="date"
@@ -44,16 +44,14 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
             </Row>
             <Row>
               <Col md="4">
-                <Label>Status *</Label>
+                <Label>Status <span style={{ color: 'red' }}>*</span></Label>
                 <Input
                   type="select"
                   onChange={handleInputs}
                   value={leavesDetails && leavesDetails.status}
                   name="status"
                 >
-                  <option defaultValue="selected">
-                    Applied
-                  </option>
+                  <option defaultValue="selected">Applied</option>
                   <option value="Approved">Approved</option>
                   <option value="Cancelled">Cancelled</option>
                   <option value="HR Approved">HR Approved</option>
@@ -63,18 +61,14 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                 </Input>
               </Col>
               <Col md="4">
-                <Label>Type of Leave *</Label>
+                <Label>Type of Leave <span style={{ color: 'red' }}>*</span></Label>
                 <Input
                   type="select"
-                  onChange={(e) => {
-                    handleInputs(e);
-                  }}
+                  onChange={handleInputs}
                   value={leavesDetails && leavesDetails.leave_type}
                   name="leave_type"
                 >
-                  <option defaultValue="selected">
-                    Please Select
-                  </option>
+                  <option defaultValue="selected">Please Select</option>
                   <option value="Absent">Absent</option>
                   <option value="Annual Leave">Annual Leave</option>
                   <option value="Hospitalization Leave">Hospitalization Leave</option>
@@ -82,7 +76,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                 </Input>
               </Col>
 
-              {leavesDetails && leavesDetails.leave_type === 'Annual Leave' && (
+              {leavesDetails?.leave_type === 'Annual Leave' && (
                 <Col md="4">
                   <Label>Went Overseas</Label>
                   <FormGroup>
@@ -91,17 +85,17 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                       name="went_overseas"
                       value="1"
                       onChange={handleInputs}
-                      defaultChecked={leavesDetails && leavesDetails.went_overseas === 1 && true}
-                    ></Input>
+                      defaultChecked={leavesDetails?.went_overseas === 1}
+                    />
                     <Label>Yes</Label>
-                    <br></br>
+                    <br />
                     <Input
                       type="radio"
                       name="went_overseas"
                       value="0"
                       onChange={handleInputs}
-                      defaultChecked={leavesDetails && leavesDetails.went_overseas === 0 && true}
-                    ></Input>
+                      defaultChecked={leavesDetails?.went_overseas === 0}
+                    />
                     <Label>No</Label>
                   </FormGroup>
                 </Col>
@@ -110,12 +104,13 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
           </FormGroup>
         </Form>
       </ComponentCard>
+
       <ComponentCard title="More Details">
         <Form>
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>From Date</Label>
+                <Label>From Date <span style={{ color: 'red' }}>*</span></Label>
                 <Input
                   type="date"
                   onChange={handleInputs}
@@ -126,10 +121,11 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>To Date</Label>
+                <Label>To Date <span style={{ color: 'red' }}>*</span></Label>
                 <Input
                   type="date"
                   onChange={handleInputs}
+                  min={leavesDetails && moment(leavesDetails.from_date).format('YYYY-MM-DD')}
                   value={leavesDetails && moment(leavesDetails.to_date).format('YYYY-MM-DD')}
                   name="to_date"
                 />
@@ -139,11 +135,11 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>No of Days(Current Month)</Label>
+                <Label>No of Days (Current Month) <span style={{ color: 'red' }}>*</span></Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={leavesDetails && leavesDetails.no_of_days}
+                  value={leavesDetails?.no_of_days}
                   name="no_of_days"
                 />
               </FormGroup>
@@ -151,11 +147,11 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
             {difference && (
               <Col md="3">
                 <FormGroup>
-                  <Label>No of Days(Next Month)</Label>
+                  <Label>No of Days (Next Month)</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={leavesDetails && leavesDetails.no_of_days_next_month}
+                    value={leavesDetails?.no_of_days_next_month}
                     name="no_of_days_next_month"
                   />
                 </FormGroup>
@@ -167,7 +163,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                 <Input
                   type="textarea"
                   onChange={handleInputs}
-                  value={leavesDetails && leavesDetails.reason}
+                  value={leavesDetails?.reason}
                   name="reason"
                 />
               </FormGroup>

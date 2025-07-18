@@ -194,6 +194,9 @@ const CPFCalculatorDetails = Loadable(
   lazy(() => import('../views/detailTable/CPFCalculatorDetails')),
 );
 
+const CPFCalculatorEdit = Loadable(
+  lazy(() => import('../views/EditData/CpfCalculatorEdit')),
+);
 // Admin
 const StaffTable = Loadable(lazy(() => import('../views/smartconTables/Staff')));
 const StaffDetailsTable = Loadable(lazy(() => import('../views/detailTable/StaffDetails')));
@@ -215,6 +218,7 @@ const FinanceEdit = Loadable(lazy(() => import('../views/EditData/FinanceEdit'))
 const TenderEdit = Loadable(lazy(() => import('../views/EditData/TenderEdit')));
 const TranslationEdit = Loadable(lazy(() => import('../views/EditData/TranslationEdit')));
 const TrainingEdit = Loadable(lazy(() => import('../views/EditData/TrainingEdit')));
+const EmployeeEdit = Loadable(lazy(() => import('../views/EditData/EmployeeEdit')));
 const ProjectEdit = Loadable(lazy(() => import('../views/EditData/ProjectEdit')));
 const ClientEdit = Loadable(lazy(() => import('../views/EditData/ClientEdit')));
 const SectionEdit = Loadable(lazy(() => import('../views/EditData/SectionEdit')));
@@ -275,6 +279,7 @@ const Routernew = () => {
           <Route path="/FinanceEdit/:id" name="financedata" element={<FinanceEdit />}></Route>
                     <Route path="/TranslationEdit/:id" name="translationdata" element={<TranslationEdit />}></Route>
           <Route path="/TrainingEdit/:id" name="trainingdata" element={<TrainingEdit />}></Route>
+          <Route path="/EmployeeEdit/:id" name="trainingdata" element={<EmployeeEdit />}></Route>
           <Route path="/projectEdit/:id" name="projectdata" element={<ProjectEdit />}></Route>
           <Route path="/TenderEdit/:id" name="tenderdata" element={<TenderEdit />}></Route>
           <Route path="/clientEdit/:id" name="clientdata" element={<ClientEdit />}></Route>
@@ -282,7 +287,7 @@ const Routernew = () => {
           <Route path="/LeavesEdit/:id" name="leavedata" element={<LeavesEdit />}></Route>
           <Route path="/SmartAttendanceEdit/:id" name="smartattendancedata" element={<SmartAttendanceEdit />}></Route>  
           <Route path="/InvoiceEdit/:id" name="invoicedata" element={<InvoiceEdit />}></Route>
-          <Route path="/LoanEdit/:id" name="loandata" element={<LoanEdit />}></Route>
+          <Route path="/LoanEdit/:id/:id" name="loandata" element={<LoanEdit />}></Route>
                     <Route
             path="/JobInformationEdit/:id"
             name="jobinformationdata"
@@ -444,6 +449,8 @@ const Routernew = () => {
             name="cpfcalculatordetailsdata"
             element={<CPFCalculatorDetails />}
           ></Route>
+           <Route path="/cpfCalculatorEdit/:id" name="cpfEdit" element={<CPFCalculatorEdit />}></Route>
+
           <Route path="/Staff" name="staffdata" element={<StaffTable />}></Route>
           <Route path="/StaffDetails" name="staffdetailsdata" element={<StaffDetailsTable />}></Route>
           <Route path="/ProjectReport" name="projectreportdata" element={<ProjectReportTable />}></Route>

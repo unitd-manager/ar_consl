@@ -1,20 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
-import ComponentCard from '../ComponentCard';
 
-export default function JobBankModal({
-    handleInputs, jobModal ,allBankModal
-}) {
-    JobBankModal.propTypes = {
-        handleInputs: PropTypes.object,
-        jobModal: PropTypes.object,
-        allBankModal: PropTypes.object
+export default function JobBank({ handleInputs, jobModal, allBankModal }) {
+  JobBank.propTypes = {
+    handleInputs: PropTypes.object,
+    jobModal: PropTypes.object,
+    allBankModal: PropTypes.object,
   };
   return (
-    <ComponentCard >
-    
-    <ComponentCard title="Bank Information">
+    <>
       <FormGroup>
         <Row>
           <Col md="3">
@@ -48,20 +43,24 @@ export default function JobBankModal({
             </FormGroup>
           </Col>
           <Col md="3">
-                <FormGroup>
-                <Label>Bank</Label>
-                  <Input
-                    type="select"
-                    name="bank_name"
-                    onChange={handleInputs}
-                    value={jobModal && jobModal.bank_name}>
-                    <option selected="selected" value="">
-                      Please Select
-                    </option>
-                    {allBankModal && allBankModal.map(bank=>(<option value={bank.bank_name}>{bank.bank_name}</option>))}
-          </Input>
-                </FormGroup>
-              </Col>
+            <FormGroup>
+              <Label>Bank</Label>
+              <Input
+                type="select"
+                name="bank_name"
+                onChange={handleInputs}
+                value={jobModal && jobModal.bank_name}
+              >
+                <option selected="selected" value="">
+                  Please Select
+                </option>
+                {allBankModal &&
+                  allBankModal.map((bank) => (
+                    <option value={bank.bank_name}>{bank.bank_name}</option>
+                  ))}
+              </Input>
+            </FormGroup>
+          </Col>
           <Col md="3">
             <FormGroup>
               <Label>Bank Code</Label>
@@ -86,9 +85,6 @@ export default function JobBankModal({
           </Col>
         </Row>
       </FormGroup>
-    </ComponentCard>
-   
-  </ComponentCard>
-  
+    </>
   );
 }

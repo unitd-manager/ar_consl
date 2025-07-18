@@ -12,7 +12,6 @@ import {
   Table,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-// import { useDispatch } from 'react-redux';
 
 function ViewAnnualLeaveModal({ annualLeaveModal, setAnnualLeaveModal, annualLeave }) {
   ViewAnnualLeaveModal.propTypes = {
@@ -44,7 +43,7 @@ function ViewAnnualLeaveModal({ annualLeaveModal, setAnnualLeaveModal, annualLea
       grow: 0,
     },
   ];
-  
+
   return (
     <>
       <Modal isOpen={annualLeaveModal}>

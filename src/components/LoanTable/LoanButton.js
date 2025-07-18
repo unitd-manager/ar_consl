@@ -59,31 +59,7 @@ export default function LoanButtons({
                 Apply
               </Button>
             </Col>
-            {/* <Col>
-              <Button
-                type="submit"
-                color="dark"
-                className="shadow-none"
-                onClick={(e) => {
-                  if (window.confirm('Are you sure you want to cancel? ')) {
-                    navigate('/Loan');
-                  } else {
-                    e.preventDefault();
-                  }
-                }}
-              >
-                Cancel
-              </Button>
-            </Col>
-            <Col>
-            <DeleteButton
-              ifAttachment
-              attachmentroom="attachmentroom"
-              id={id} 
-              columnname="loan_id"
-              tablename="loan"
-            ></DeleteButton>
-            </Col> */}
+           
             <Col>
               <Button
                 color="dark"

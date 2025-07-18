@@ -8,104 +8,101 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 
 const JobInformationDetails = () => {
-  //All state variables
-  const [employee, setEmployee] = useState();
+  const [employee, setEmployee] = useState([]);
   const [jobForms, setJobForms] = useState({
     employee_id: '',
     first_name: '',
     fin_no: '',
-    status:'current'
+    status: 'current',
   });
-  //Navigation and Parameters
+
   const { id } = useParams();
   const navigate = useNavigate();
-  // Gettind data from Job By Id
-  const editJobById = () => {
+
+  // Fetch employee list (those who don't have job information)
+  const fetchEmployees = () => {
     api
       .get('/jobinformation/getEmployee')
       .then((res) => {
-        console.log(res.data.data);
         setEmployee(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => {
+        message('Failed to fetch employee list.', 'error');
+      });
   };
-  //jobinformation data in jobinformationDetails
+
+  // Handle form field changes
   const handleInputs = (e) => {
     setJobForms({ ...jobForms, [e.target.name]: e.target.value });
   };
-  //inserting data of job information
+
+  // Submit form
   const insertJobInformation = () => {
-   
     api
       .post('/jobinformation/insertjob_information', jobForms)
       .then((res) => {
-        const insertedDataId = res.data.data.insertId;
-        console.log(insertedDataId);
+        const insertedId = res.data.data.insertId;
         message('Job Information inserted successfully.', 'success');
         setTimeout(() => {
-          navigate(`/JobInformationEdit/${insertedDataId}`);
+          navigate(`/JobInformationEdit/${insertedId}`);
         }, 300);
       })
       .catch(() => {
         message('Please fill all required fields.', 'warning');
       });
-     
   };
+
   useEffect(() => {
-    editJobById();
+    fetchEmployees();
   }, [id]);
+
   return (
     <div>
       <BreadCrumbs />
       <Row>
-        <ToastContainer></ToastContainer>
+        <ToastContainer />
         <Col md="6">
           <ComponentCard title="Key Details">
             <Form>
               <FormGroup>
-                <Row>
-                  <Label>Employee Name<span className='required'>*</span> </Label>
-                  <Input
-                    type="select"
-                    name="employee_id"
-                    onChange={(e) => {
-                      handleInputs(e);
-                    }}>
-                    <option value="" selected >Please Select</option>
-                    {employee &&
-                      employee.map((ele) => {
-                        return (
-                          ele.e_count === 0 && (<option key={ele.employee_id} value={ele.employee_id}>
-                            {ele.first_name}
-                          </option>)
-                        );
-                      })}
-                  </Input>
-                </Row>
-                
-                <FormGroup>
-                  <Row>
-                    <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-                      <Button color="primary"
-                        type="button"
-                        className="btn mr-2 shadow-none"
-                        onClick={() => {
-                          insertJobInformation();
-                        }}>
-                        Save & Continue
-                      </Button>
-                      <Button
-                      onClick={() => {
-                        navigate('/JobInformation');
-                      }}
-                      type="button"
-                      className="btn btn-dark shadow-none">
-                        Cancel
-                      </Button>
-                    </div>
-                  </Row>
-                </FormGroup>
+                <Label>
+                  Employee Name <span className="required">*</span>
+                </Label>
+                <Input
+                  type="select"
+                  name="employee_id"
+                  value={jobForms.employee_id}
+                  onChange={handleInputs}
+                >
+                  <option value="">Please Select</option>
+                  {employee &&
+                    employee
+                      .filter((ele) => ele.e_count === 0)
+                      .map((ele) => (
+                        <option key={ele.employee_id} value={ele.employee_id}>
+                          {ele.first_name}
+                        </option>
+                      ))}
+                </Input>
               </FormGroup>
+
+              <div className="pt-3 mt-3 d-flex align-items-center gap-2">
+                <Button
+                  color="primary"
+                  type="button"
+                  className="btn mr-2 shadow-none"
+                  onClick={insertJobInformation}
+                >
+                  Save & Continue
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => navigate('/JobInformation')}
+                  className="btn btn-dark shadow-none"
+                >
+                  Cancel
+                </Button>
+              </div>
             </Form>
           </ComponentCard>
         </Col>
@@ -113,4 +110,5 @@ const JobInformationDetails = () => {
     </div>
   );
 };
+
 export default JobInformationDetails;

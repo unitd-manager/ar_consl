@@ -2,79 +2,90 @@ import React from 'react';
 import { Form, FormGroup, Table } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import ComponentCard from '../ComponentCard';
 
-export default function PreviousEarlierLoan({ loan }) {
+export default function PreviousEarlierLoan({ loan ,loanDetails}) {
   PreviousEarlierLoan.propTypes = {
     loan: PropTypes.any,
+    loanDetails:PropTypes.any
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const arb = selectedLanguage === 'Arabic';
+
+  let prevloan=[];
+  if(loan){
+   prevloan=loan.filter((el)=>{
+    return (el.loan_id !== loanDetails.loan_id && (new Date(loanDetails.date)>= new Date(el.date) ) )
+  })
+  console.log('prev loan',prevloan)}
+  
   const columns = [
     {
       name: '#',
     },
     {
-      name: 'Type of Loan',
+      name: arb? 'نوع القرض': 'Type of Loan',
     },
     {
-      name: 'Status',
+      name: arb? 'حالة':'Status',
     },
     {
-      name: 'Date',
+      name: arb? 'تاريخ':'Date',
     },
     {
-      name: 'Loan Start Date',
+      name:arb? 'تاريخ بدء القرض': 'Loan Start Date',
     },
     {
-      name: 'Total Loan Amount',
+      name: arb? 'إجمالي مبلغ القرض':'Total Loan Amount',
     },
     {
-      name: 'AmountPayable(permonth)',
+      name:arb? 'المبلغ المستحق (شهريا)': 'AmountPayable(permonth)',
     },
     {
-      name: 'Loan Closing Date',
+      name:arb? 'تاريخ إغلاق القرض': 'Loan Closing Date',
     },
   ];
   return (
     <Form>
       <FormGroup>
-        <ComponentCard title="PreviousLoan/EarlierLoan">
-          <div className="MainDiv">
-            <div className="container">
-              <Table id="example" className="display border border-secondary rounded">
-                <thead>
-                  <tr>
-                    {columns.map((cell) => {
-                      return <td key={cell.name}>{cell.name}</td>;
-                    })}
+        <Table id="example" className="display border border-secondary rounded">
+          <thead>
+            <tr>
+              {columns.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {prevloan &&
+              prevloan.map((element, index) => {
+                return (
+                  <tr key={element.loan_id}>
+                    <td>{index + 1}</td>
+                    <td>{element.type}</td>
+                    <td>{element.status}</td>
+                    <td>{element.date ? moment(element.date).format('DD-MM-YYYY') : ''}</td>
+                    <td>
+                      {element.loan_start_date
+                        ? moment(element.loan_start_date).format('DD-MM-YYYY')
+                        : ''}
+                    </td>
+                    <td>{element.amount}</td>
+                    <td>{element.month_amount}</td>
+                    <td>
+                      {element.loan_closing_date
+                        ? moment(element.loan_closing_date).format('DD-MM-YYYY')
+                        : ''}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {loan &&
-                    loan.map((element, index) => {
-                      return (
-                        <tr key={element.loan_id}>
-                          <td>{index + 1}</td>
-                          <td>{element.type}</td>
-                          <td>{element.status}</td>
-                          <td>{element.date ? moment(element.date).format('YYYY-MM-DD') : ''}</td>
-                          <td>
-                            {element.loan_start_date
-                              ? moment(element.loan_start_date).format('YYYY-MM-DD')
-                              : ''}
-                          </td>
-                          <td>{element.amount}</td>
-                          <td>{element.month_amount}</td>
-                          <td>{element.loan_closing_date
-                              ? moment(element.loan_closing_date).format('YYYY-MM-DD')
-                              : ''}</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </ComponentCard>
+                );
+              })}
+          </tbody>
+        </Table>
       </FormGroup>
     </Form>
   );

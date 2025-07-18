@@ -1,49 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
-import ComponentCard from '../ComponentCard';
 
-export default function JobSalary({
-    handleInputs, jobModal 
-}) {
-    JobSalary.propTypes = {
-        handleInputs: PropTypes.object,
-        jobModal: PropTypes.object,
+export default function JobSalary({ handleInputs, jobModal }) {
+  JobSalary.propTypes = {
+    handleInputs: PropTypes.object,
+    jobModal: PropTypes.object,
   };
   return (
-    <ComponentCard >
-    <Col md="3">
-      <FormGroup>
-        <Label> CPF Applicable</Label>
-        <br></br>
-        <Label> Yes </Label>
-        <Input
-          name="cpf_applicable"
-          value="1"
-          type="radio"
-          defaultChecked={jobModal && jobModal.cpf_applicable === 1 && true}
-          onChange={handleInputs} />
-       <Label> No </Label>
-        <Input
-          name="cpf_applicable"
-          value="0"
-          type="radio"
-          defaultChecked={jobModal && jobModal.cpf_applicable === 0 && true}
-          onChange={handleInputs}   />
-      </FormGroup>
-    </Col>
-    <FormGroup>
+    <>
       <Row>
         <Col md="3">
           <FormGroup>
-            <Label> 
-              Govt donation<span className="required"> *</span> 
+            <Label> CPF Applicable</Label>
+            <br></br>
+            <Label> Yes </Label>
+            <Input
+              name="cpf_applicable"
+              value="1"
+              type="radio"
+              defaultChecked={jobModal && jobModal.cpf_applicable === 1 && true}
+              onChange={handleInputs}
+            />
+            <Label> No </Label>
+            <Input
+              name="cpf_applicable"
+              value="0"
+              type="radio"
+              defaultChecked={jobModal && jobModal.cpf_applicable === 0 && true}
+              onChange={handleInputs}
+            />
+          </FormGroup>
+        </Col>
+
+        <Col md="3">
+          <FormGroup>
+            <Label>
+              Govt donation<span className="required"> *</span>
             </Label>
             <Input
               type="select"
               value={jobModal && jobModal.govt_donation}
               name="govt_donation"
-              onChange={handleInputs}  >
+              onChange={handleInputs}
+            >
               <option value="" selected="selected">
                 Please Select
               </option>
@@ -62,7 +62,8 @@ export default function JobSalary({
                 type="numbers"
                 onChange={handleInputs}
                 value={jobModal && jobModal.pay_cdac}
-                name="pay_cdac"  />
+                name="pay_cdac"
+              />
             </FormGroup>
           </Col>
         )}
@@ -74,7 +75,8 @@ export default function JobSalary({
                 type="numbers"
                 onChange={handleInputs}
                 value={jobModal && jobModal.pay_sinda}
-                name="pay_sinda"  />
+                name="pay_sinda"
+              />
             </FormGroup>
           </Col>
         )}
@@ -86,7 +88,8 @@ export default function JobSalary({
                 type="numbers"
                 onChange={handleInputs}
                 value={jobModal && jobModal.pay_mbmf}
-                name="pay_mbmf"  />
+                name="pay_mbmf"
+              />
             </FormGroup>
           </Col>
         )}
@@ -98,7 +101,8 @@ export default function JobSalary({
                 type="numbers"
                 onChange={handleInputs}
                 value={jobModal && jobModal.pay_euef}
-                name="pay_euef"  />
+                name="pay_euef"
+              />
             </FormGroup>
           </Col>
         )}
@@ -109,7 +113,8 @@ export default function JobSalary({
               type="text"
               onChange={handleInputs}
               value={jobModal && jobModal.income_tax_id}
-              name="income_tax_id"  />
+              name="income_tax_id"
+            />
           </FormGroup>
         </Col>
         <Col md="3">
@@ -119,7 +124,8 @@ export default function JobSalary({
               type="text"
               onChange={handleInputs}
               value={jobModal && jobModal.income_tax_amount}
-              name="income_tax_amount"  />
+              name="income_tax_amount"
+            />
           </FormGroup>
         </Col>
         <Col md="3">
@@ -129,14 +135,11 @@ export default function JobSalary({
               type="text"
               onChange={handleInputs}
               value={jobModal && jobModal.cpf_account_no}
-              name="cpf_account_no"  />
+              name="cpf_account_no"
+            />
           </FormGroup>
         </Col>
       </Row>
-    </FormGroup>
-    
-   
-  </ComponentCard>
-  
+    </>
   );
 }

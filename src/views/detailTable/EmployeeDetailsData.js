@@ -1,527 +1,316 @@
-import React, { useEffect, useState } from 'react';
-import { Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import React, { useContext, useState } from 'react';
+import { Row, Col, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-import { useParams, useNavigate } from 'react-router-dom';
-import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
-import ComponentCard from '../../components/ComponentCard';
-import TabPassTypeTab from '../../components/employee/TabPassTypeTab';
-import EducationalQualificationTab from '../../components/employee/EducationalQualificationTab';
-import ContactInformationTab from '../../components/employee/ContactInformationTab';
-import EmergencyContactTab from '../../components/employee/EmergencyContactTab';
-import EmployeePart from '../../components/employee/EmployeePart';
-import AttachmentPortalsTab from '../../components/employee/AttachmentPortalsTab';
-import LinkedPortalsTab from '../../components/employee/LinkedPortalsTab';
-import LoginDetailsTab from '../../components/employee/LoginDetailsTab';
-import EmployeeButtons from '../../components/employee/EmployeeButtons';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import api from '../../constants/api';
 import message from '../../components/Message';
+import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
+import ComponentCard from '../../components/ComponentCard';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
-const EmployeeDetailsData = () => {
+const EmployeeDetails = () => {
+
+  
+  const getSelectedLocationFromLocalStorage = () => {
+    const locations = localStorage.getItem('selectedLocation');
+    const loc=JSON.parse(locations);
+    return locations ? Number(loc) : null;
+  };
+
+  const selectedLocation = getSelectedLocationFromLocalStorage();
+
+  
   //state variables
-  const [activeTab, setActiveTab] = useState('1');
-  const [employeeDetails, setEmployeeDetails] = useState();
-  // employee_id: "",
-  //   emp_code: "",
-  //   first_name: "",
-  //   salutation: "",
-  //   gender: "",
-  //   status: "",
-  //   date_of_birth: "",
-  //   passport: "",
-  //   date_of_expiry: null,
-  //   marital_status: null,
-  //   nationality: null,
-  //   race: null,
-  //   religion: null,
-  //   project_designation: "",
-  //   project_manager: null,
-  //   admin_staff: null,
-  //   team: null,
-  //   country_name: "",
-  //   login_email: null,
-  //   login_pass_word: null,
-  //   staff_user_group_id: null,
-  //   staff_published: null,
-  //   notes:''
-  const [contactInformationDetails, setContactInformationDetails] = useState({
-    employee_id: '',
-    address_area: '',
-    address_street: '',
-    address_po_code: '',
-    address_country1: '',
-    mobile: '',
-    phone: '',
-    email: '',
-    foreign_addrs_area: '',
-    foreign_addrs_street: '',
-    foreign_addrs_country: '',
-    foreign_addrs_postal_code: '',
-    foreign_mobile: '',
-    foreign_email: '',
-    phone_direct: '',
-  });
-
-  const [emergencyContactDetails, setEmergencyContactDetails] = useState({
-    employee_id: '',
-    emergency_contact_name: '',
-    emergency_contact_phone: '',
-    emergency_contact_phone2: '',
-    emergency_contact_address: '',
-  });
-  const [educationalQualificationDetails, setEducationalQualificationDetails] = useState({
-    employee_id: '',
-    degree1: '',
-    educational_qualitifcation1: '',
-    year_of_completion1: '',
-    degree2: '',
-    educational_qualitifcation2: '',
-    year_of_completion2: '',
-    degree3: '',
-    educational_qualitifcation3: '',
-    year_of_completion3: '',
-  });
-  const [tabPassTypeDetails, setTabPassTypeDetails] = useState({
+  // const [empcode, setEmpcode] = useState();
+  const [employeeData, setEmployeeData] = useState({
+    employee_name: '',
     citizen: '',
     nric_no: '',
-    employee_id: '',
     fin_no: '',
-    fin_no_expiry_date: '',
-    work_permit_no: '',
-    work_permit_expiry_date: '',
-    spr_year: '',
+    work_permit: '',
+    status: 'Current',
+    emp_code: '',
+    date_of_birth: moment(),
+    date_of_expiry: moment(),
+    fin_no_expiry_date: moment(),
+    work_permit_expiry_date: moment(),
+    year_of_completion1: moment(),
+    year_of_completion2: moment(),
+    year_of_completion3: moment(),
   });
-  const [allCountries, setallCountries] = useState([]);
-  const [companies, setCompanies] = useState([]);
-  const [qualifications, setQualifications] = useState([]);
-  const [attachmentModal, setAttachmentModal] = useState(false);
-  const [attachmentData, setDataForAttachment] = useState({
-    modelType: '',
-  });
-  const [pictureData, setDataForPicture] = useState({
-    modelType: '',
-  });
-
-  //params and routing
-  const { id } = useParams();
+  const [passtype, setPasstype] = useState('');
+  //routing
   const navigate = useNavigate();
-  // Route Change
-  const applyChanges = () => {};
-  const saveChanges = () => {
-    navigate('/Employee');
-  };
-  const backToList = () => {
-    navigate('/Employee');
-  };
-  //handle inputs and set data
-  const handleInputChange = (e) => {
-    setEmployeeDetails({ ...employeeDetails, [e.target.name]: e.target.value });
-  };
-  const handlePassTypeInputs = (e) => {
-    setTabPassTypeDetails({ ...tabPassTypeDetails, [e.target.name]: e.target.value });
-  };
-  const handleCiInputs = (e) => {
-    setContactInformationDetails({ ...contactInformationDetails, [e.target.name]: e.target.value });
-  };
 
-  const handleEcInputs = (e) => {
-    setEmergencyContactDetails({ ...emergencyContactDetails, [e.target.name]: e.target.value });
+  const handleInputs = (e) => {
+    setEmployeeData({ ...employeeData, [e.target.name]: e.target.value });
   };
-  const handleEduInputs = (e) => {
-    setEducationalQualificationDetails({
-      ...educationalQualificationDetails,
-      [e.target.name]: e.target.value,
-    });
+  const handlePasstype = (e) => {
+    setPasstype(e.target.value);
   };
-  //tab toggle
-  const toggle = (tab) => {
-    if (activeTab !== tab) setActiveTab(tab);
-  };
-  //get apis
-  // Get Employee data By Employee id
-  const getEmployeeById = () => {
-    api
-      .post('/employeeModule/getEmployeeById', { employee_id: id })
-      .then((res) => {
-        setEmployeeDetails(res.data.data[0]);
-      })
-      .catch(() => {
-        message('Employee Data Not Found', 'info');
-      });
-  };
-  //get Contact Information data
-  const getContactInformationById = () => {
-    api
-      .post('/employeeModule/TabContactInformationById', { employee_id: id })
-      .then((res) => {
-        setContactInformationDetails(res.data.data[0]);
-      })
-      .catch(() => {
-        message('contact info Data Not Found', 'info');
-      });
-  };
-  //get EmergencyContact data
-  const getEmergencyContactById = () => {
-    api
-      .post('/employeeModule/TabEmergencyContactById', { employee_id: id })
-      .then((res) => {
-        setEmergencyContactDetails(res.data.data[0]);
-      })
-      .catch(() => {
-        message('Emergency contact info Data Not Found', 'info');
-      });
-  };
+  const { loggedInuser } = useContext(AppContext);
 
-  //get EducationalQualification data
-  const getEducationalQualificationById = () => {
-    api
-      .post('/employeeModule/TabEducationalQualificationById', { employee_id: id })
-      .then((res) => {
-        setEducationalQualificationDetails(res.data.data[0]);
-      })
-      .catch(() => {
-        message('Educational Qualification Data Not Found', 'info');
-      });
-  };
-  //get tabPassType data
-  const getTabPassTypeById = () => {
-    api
-      .post('/employeeModule/getTabPassTypeByID', { employee_id: id })
-      .then((res) => {
-        setTabPassTypeDetails(res.data.data[0]);
-      })
-      .catch(() => {
-        message('TabPass Type Data Not Found', 'info');
-      });
-  };
-  //Api for getting all countries
-  const getAllCountries = () => {
-    api
-      .get('/geocountry/getCountry')
-      .then((res) => {
-        setallCountries(res.data.data);
-      })
-      .catch(() => {
-        message('Country Data Not Found', 'info');
-      });
-  };
-  //Api for getting all countries
-  const getAllCompanies = () => {
-    api
-      .get('/company/getCompany')
-      .then((res) => {
-        setCompanies(res.data.data);
-      })
-      .catch(() => {
-        message('Country Data Not Found', 'info');
-      });
-  };
-  //Api for getting Qualification
-  const getQualifications = () => {
-    api
-      .get('/employeeModule/getQualification')
-      .then((res) => {
-        setQualifications(res.data.data);
-      })
-      .catch(() => {
-        message('qualification Data Not Found', 'info');
-      });
-  };
 
-  // Api calls for Editing
-  //edit employeedata
-  const editEmployeeData = () => {
+  //Insert Employee Data
+  // Import necessary modules and components
+
+  // ... Other code ...
+
+  // Insert Employee Data
+  const insertEmployee = (code) => {
+    employeeData.emp_code = code;
+    employeeData.date_of_birth = moment();
+    employeeData.date_of_expiry = moment();
+    employeeData.fin_no_expiry_date = moment();
+    employeeData.work_permit_expiry_date = moment();
+    employeeData.year_of_completion1 = moment();
+    employeeData.year_of_completion2 = moment();
+    employeeData.year_of_completion3 = moment();
+    employeeData.creation_date = creationdatetime;
+    employeeData.created_by= loggedInuser.first_name;
+    employeeData.site_id = selectedLocation;
+    api
+      .post('/employeemodule/insertEmployee', employeeData)
+      .then((res) => {
+        const insertedDataId = res.data.data.insertId;
+        message('Employee inserted successfully.', 'success');
+        setTimeout(() => {
+          navigate(`/EmployeeEdit/${insertedDataId}?tab=1`);
+        }, 300);
+      })
+      .catch(() => {
+        message('Unable to create employee.', 'error');
+      });
+  };
+  const [isNricAlreadyInserted, setIsNricAlreadyInserted] = useState(false); //
+  const generateCode = () => {
     if (
-      employeeDetails.first_name !== '' &&
-      employeeDetails.date_of_birth !== '' &&
-      employeeDetails.nationality !== '' &&
-      employeeDetails.gender !== ''
+      employeeData.employee_name !== '' &&
+      employeeData.status !== '' &&
+      passtype !== ''
     ) {
-      api
-        .post('/employeeModule/edit-Employee', employeeDetails)
-        .then(() => {
-          message('Record editted successfully', 'success');
-        })
-        .catch(() => {
-          message('Unable to edit record.', 'error');
-        });
-    } else {
-      message('Please fill the required fields', 'warning');
-    }
-  };
-
-  //update tab data
-  const editCIData = () => {
-    api
-      .post('/employeeModule/edit-ContactInformation', contactInformationDetails)
-      .then(() => {
-        message('Record editted successfully', 'success');
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
-  };
-  //update tab data
-  const editECData = () => {
-    api
-      .post('/employeeModule/edit-EmergencyContact', emergencyContactDetails)
-      .then(() => {
-        message('Record editted successfully', 'success');
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
-  };
-  //update tab data
-  const editEQData = () => {
-    api
-      .post('/employeeModule/edit-EducationalQualification', educationalQualificationDetails)
-      .then(() => {
-        message('Record editted successfully', 'success');
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
-  };
-  //update tabpasstype data
-  const editTabPassTypeData = () => {
-    if (tabPassTypeDetails.citizen === 'Citizen' || tabPassTypeDetails.citizen === 'PR') {
-      if (tabPassTypeDetails.nric_no !== '') {
+      // Check if the employeeData contains either NRIC, FIN, or both
+      if (
+        employeeData.nric_no !== '' ||
+        employeeData.fin_no !== '' ||
+        employeeData.work_permit !== ''
+      ) {
         api
-          .post('/employeeModule/edit-TabPassType', tabPassTypeDetails)
-          .then(() => {
-            message('Record editted successfully', 'success');
+          .post('/employeemodule/getEmployeeById', {
+            nric_no: employeeData.nric_no,
+            employee_id:employeeData.employee_id
           })
+          .then((response) => {
+            if (response.data.error) {
+              // Number already exists, show an alert message
+              setIsNricAlreadyInserted(true); // Set the state to indicate that NRIC is already inserted
+              message('NRIC is already inserted. Please provide a different number.', 'error');
+            } else {
+              // No duplicates found, proceed with inserting the employee
+              setIsNricAlreadyInserted(false); // Reset the state
+
+              api
+                .post('/commonApi/getCodeValue', { type: 'employee' })
+                .then((res) => {
+                  insertEmployee(res.data.data);
+                })
+                .catch(() => {
+                  insertEmployee('');
+                });
+            }
+          })
+
           .catch(() => {
-            message('Unable to edit record.', 'error');
+            message('Unable to check for duplicate numbers.', 'error');
           });
       } else {
-        message('Please fill the nricno fields', 'warning');
-      }
-    } else if (
-      tabPassTypeDetails.citizen === 'SP' ||
-      tabPassTypeDetails.citizen === 'DP' ||
-      tabPassTypeDetails.citizen === 'EP' ||
-      tabPassTypeDetails.citizen === 'WP'
-    ) {
-      if (tabPassTypeDetails.fin_no !== '') {
-        api
-          .post('/employeeModule/edit-TabPassType', tabPassTypeDetails)
-          .then(() => {
-            message('Record editted successfully', 'success');
-          })
-          .catch(() => {
-            message('Unable to edit record.', 'error');
-          });
-      } else {
-        message('Please fill the fin no field', 'warning');
+        message('Please fill at least one required field (NRIC, FIN, or Work Permit).', 'error');
       }
     } else {
-      message('Please fill the PassType', 'warning');
+      message('Please fill all required fields.', 'error');
     }
   };
-  //update all data
-  const updateData = async () => {
-    await editEmployeeData();
-    await editTabPassTypeData();
-    await editEQData();
-    await editECData();
-    await editCIData();
-  };
-
-  //Api call for Deleting Employee Data
-  const deleteEmployeeData = () => {
-    api
-      .post('/employeeModule/deleteEmployee', { employee_id: id })
-      .then(() => {
-        message('Record deleted successfully', 'success');
-      })
-      .catch(() => {
-        message('Unable to delete record.', 'error');
-      });
-  };
-  //Attachments
-  const dataForAttachment = () => {
-    setDataForAttachment({
-      modelType: 'attachment',
-    });
-  };
-  //Pictures
-  const dataForPicture = () => {
-    setDataForPicture({
-      modelType: 'picture',
-    });
-  };
-
-  useEffect(() => {
-    getEmployeeById();
-    getTabPassTypeById();
-    getContactInformationById();
-    getEducationalQualificationById();
-    getEmergencyContactById();
-    getAllCountries();
-    getQualifications();
-    getAllCompanies();
-  }, [id]);
+  // const insertEmployee = (code) => {
+  //   // Check if the employee name already exists
+  //   checkEmployeeNameExists()
+  //     .then((res) => {
+  //       if (res.data.data === 'exists') {
+  //         // Display an alert message indicating that the name already exists
+  //         message('Employee name already exists.', 'error');
+  //       } else {
+  //         // Proceed with the insertion
+  //         employeeData.emp_code = code;
+  //         employeeData.date_of_birth = moment();
+  //         // ... (other code for insertion)
+  //       }
+  //     })
+  //     .catch(() => {
+  //       // Handle any errors that occur during the check
+  //       message('Error checking employee name.', 'error');
+  //     });
+  // };
 
   return (
-    <>
+    <div>
       <ToastContainer></ToastContainer>
       <BreadCrumbs />
-      <EmployeeButtons
-        applyChanges={applyChanges}
-        saveChanges={saveChanges}
-        backToList={backToList}
-        deleteEmployeeData={deleteEmployeeData}
-        editEmployeeData={updateData}
-      />
       <Row>
-        <EmployeePart
-          employeeDetails={employeeDetails}
-          handleInputChange={handleInputChange}
-          allCountries={allCountries}
-          companies={companies}
-        />
+        <Col md="6">
+          <ComponentCard title="Key Details">
+            <FormGroup>
+              <Row>
+                <Col md="12">
+                  <Label>
+                    Full Name <span style={{ color: 'red' }}>*</span>
+                  </Label>
+                  <Input
+                    name="employee_name"
+                    value={employeeData && employeeData.employee_name}
+                    onChange={handleInputs}
+                    type="text"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <FormGroup>
+              <Row>
+                <Col md="12">
+                  <Label>
+                    Pass Type <span style={{ color: 'red' }}>*</span>
+                  </Label>
+                  <Input
+                    name="citizen"
+                    value={employeeData && employeeData.citizen}
+                    onChange={(e) => {
+                      handleInputs(e);
+                      handlePasstype(e);
+                    }}
+                    type="select"
+                  >
+                    <option value="" selected="selected">
+                      Please Select
+                    </option>
+                    <option value="Citizen">Citizen</option>
+                    <option value="PR">PR</option>
+                    <option value="EP">EP</option>
+                    <option value="SP">SP</option>
+                    <option value="WP">WP</option>
+                    <option value="DP">DP</option>
+                  </Input>
+                </Col>
+              </Row>
+            </FormGroup>
+            {(passtype === 'Citizen' || passtype === 'PR') && (
+              <FormGroup>
+                <Row>
+                  <Col md="12">
+                    <Label>
+                      NRIC No <span style={{ color: 'red' }}>*</span>
+                    </Label>
+                    <Input
+                      name="nric_no"
+                      value={employeeData && employeeData.nric_no}
+                      onChange={handleInputs}
+                      type="text"
+                    />
+                    {(isNricAlreadyInserted && (
+                      <alert color="error">
+                        NRIC is already inserted. Please provide a different number.
+                      </alert>
+                    )) ||
+                      null}
+                  </Col>
+                </Row>
+              </FormGroup>
+            )}
+
+            {(passtype === 'EP' || passtype === 'SP' || passtype === 'DP' || passtype === 'WP') && (
+              <FormGroup>
+                <Row>
+                  <Col md="12">
+                    <Label>
+                      Fin No <span style={{ color: 'red' }}>*</span>
+                    </Label>
+                    <Input
+                      name="fin_no"
+                      value={employeeData && employeeData.fin_no}
+                      onChange={handleInputs}
+                      type="text"
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+            )}
+
+            {passtype === 'WP' && (
+              <>
+                <FormGroup>
+                  <Row>
+                    <Col md="12">
+                      <Label>
+                        Work Permit No<span style={{ color: 'red' }}>*</span>
+                      </Label>
+                      <Input
+                        name="work_permit"
+                        value={employeeData && employeeData.work_permit}
+                        onChange={handleInputs}
+                        type="text"
+                      />
+                    </Col>
+                  </Row>
+                </FormGroup>
+              </>
+            )}
+            <FormGroup>
+              <Row>
+                <Col md="12">
+                  <Label>
+                    Status <span style={{ color: 'red' }}>*</span>
+                  </Label>
+                  <Input
+                    name="status"
+                    value={employeeData && employeeData.status}
+                    onChange={handleInputs}
+                    type="select"
+                  >
+                    <option selected="selected" value="Current">
+                      Current
+                    </option>
+                    <option value="Archive">Archive</option>
+                    <option value="Cancel">Cancel</option>
+                  </Input>
+                </Col>
+              </Row>
+              <Row>
+                <div className="pt-3 mt-3 d-flex align-items-center gap-2">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    className="btn mr-2 shadow-none"
+                    onClick={generateCode}
+                  >
+                    Save & Continue
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="btn btn-dark shadow-none"
+                    onClick={() => {
+                      navigate('/Employee');
+                    }}
+                  >
+                    Go to List
+                  </Button>
+                </div>
+              </Row>
+            </FormGroup>
+          </ComponentCard>
+        </Col>
       </Row>
-      <ComponentCard title="More Details">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={activeTab === '1' ? 'active' : ''}
-              onClick={() => {
-                toggle('1');
-              }}
-            >
-              Login Details
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={activeTab === '2' ? 'active' : ''}
-              onClick={() => {
-                toggle('2');
-              }}
-            >
-              Pass Type
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={activeTab === '3' ? 'active' : ''}
-              onClick={() => {
-                toggle('3');
-              }}
-            >
-              Educational Qualification
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={activeTab === '4' ? 'active' : ''}
-              onClick={() => {
-                toggle('4');
-              }}
-            >
-              Contact Information
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={activeTab === '5' ? 'active' : ''}
-              onClick={() => {
-                toggle('5');
-              }}
-            >
-              Emergency Contact
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={activeTab === '6' ? 'active' : ''}
-              onClick={() => {
-                toggle('6');
-              }}
-            >
-              Attachment Portals
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={activeTab === '7' ? 'active' : ''}
-              onClick={() => {
-                toggle('7');
-              }}
-            >
-              Linked Portals
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent className="p-4" activeTab={activeTab}>
-          <TabPane tabId="1">
-            <LoginDetailsTab
-              employeeDetails={employeeDetails}
-              handleInputChange={handleInputChange}
-            />
-          </TabPane>
-          <TabPane tabId="2">
-            <Row>
-              <TabPassTypeTab
-                tabPassTypeDetails={tabPassTypeDetails}
-                handlePassTypeInputs={handlePassTypeInputs}
-              />
-            </Row>
-          </TabPane>
-          <TabPane tabId="3">
-            <Row>
-              <EducationalQualificationTab
-                educationalQualificationDetails={educationalQualificationDetails}
-                qualifications={qualifications}
-                handleEduInputs={handleEduInputs}
-              />
-            </Row>
-          </TabPane>
-          <TabPane tabId="4">
-            <Row>
-              <ContactInformationTab
-                contactInformationDetails={contactInformationDetails}
-                handleCiInputs={handleCiInputs}
-              />
-            </Row>
-          </TabPane>
-          <TabPane tabId="5">
-            <Row>
-              <EmergencyContactTab
-                emergencyContactDetails={emergencyContactDetails}
-                handleEcInputs={handleEcInputs}
-              />
-            </Row>
-          </TabPane>
-          <TabPane tabId="6">
-            {/* Picture and Attachments Form */}
-            <Row>
-              <AttachmentPortalsTab
-                dataForPicture={dataForPicture}
-                dataForAttachment={dataForAttachment}
-                id={id}
-                attachmentModal={attachmentModal}
-                setAttachmentModal={setAttachmentModal}
-                pictureData={pictureData}
-                attachmentData={attachmentData}
-              />
-            </Row>
-          </TabPane>
-          <TabPane tabId="7">
-            <Row>
-              <LinkedPortalsTab
-                id={id}
-                employeeDetails={employeeDetails}
-                handleInputChange={handleInputChange}
-              />
-            </Row>
-          </TabPane>
-        </TabContent>
-      </ComponentCard>
-    </>
+    </div>
   );
 };
 
-export default EmployeeDetailsData;
+export default EmployeeDetails;

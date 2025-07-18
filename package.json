@@ -90,6 +90,7 @@
     "react-toastify": "^9.0.3",
     "react-validation": "^3.0.7",
     "reactstrap": "^9.0.0",
+    "read-excel-file": "^5.8.8",
     "redux": "^4.1.2",
     "simplebar-react": "^2.3.6",
     "styled-components": "^5.3.11",

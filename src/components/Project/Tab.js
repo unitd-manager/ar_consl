@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 export default function Tab({ toggle,tabs }) {
   Tab.propTypes = {
     toggle: PropTypes.func,
-    tabs: PropTypes.func,
+    tabs: PropTypes.array
   };
 
   // for tab refresh navigation #Renuka 31-05-23
@@ -21,7 +21,7 @@ export default function Tab({ toggle,tabs }) {
 
       {tabs?.map((e)=>{
         return (
-          <NavItem>
+          <NavItem key={e.id}>
             <NavLink
             key={e.id}
               className={e.id === searchParams.get('tab') ? 'active' : ''}
