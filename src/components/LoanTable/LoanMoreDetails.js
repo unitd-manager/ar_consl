@@ -174,7 +174,7 @@ export default function LoanMoreDetails({
                     <Form>
                       <Row>
                         <FormGroup>
-                          <Label>Date</Label>
+                          <Label>Date<span style={{ color: 'red' }}>*</span></Label>
                           <Input
                             type="date"
                             onChange={handlePaymentInputs}
@@ -183,7 +183,7 @@ export default function LoanMoreDetails({
                           />
                         </FormGroup>
                         <FormGroup>
-                          <Label>Amount</Label>
+                          <Label>Amount <span style={{ color: 'red' }}>*</span></Label>
                           <Input
                             type="number"
                             onChange={handlePaymentInputs}
