@@ -68,7 +68,7 @@ const TimesheetEdit = () => {
          
           </ComponentCardV2>
           <ComponentCard
-            title="`Details"
+            title="Details"
           >
             <Row>
              <Col md="3">
@@ -106,8 +106,7 @@ const TimesheetEdit = () => {
                   <Input name="on_leave" value="0" type="radio" defaultChecked={timesheetDetails && timesheetDetails.show_title === 0 && true} onChange={handleInputs}/>
                 </FormGroup>
               </Col>                
-            </Row>
-            <Row>
+
               <Col md="3">
                 <FormGroup>
                   <Label>Type Of Leave</Label>
@@ -124,6 +123,8 @@ const TimesheetEdit = () => {
                   </Input>
                 </FormGroup>
               </Col>
+              </Row>
+            <Row>
               <Col md="3">
                 <FormGroup>
                   <Label>Latitude</Label>
@@ -157,8 +158,7 @@ const TimesheetEdit = () => {
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
+          
               <Col md="3">
                 <FormGroup>
                   <Label>Time in (HH:MM)</Label>
@@ -170,6 +170,8 @@ const TimesheetEdit = () => {
                   />
                 </FormGroup>
               </Col>
+                </Row>
+            <Row>
               <Col md="3">
                 <FormGroup>
                   <Label>Time out (HH:MM)</Label>

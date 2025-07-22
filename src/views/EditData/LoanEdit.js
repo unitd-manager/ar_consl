@@ -105,8 +105,8 @@ const LoanEdit = () => {
   // Edit loan data
   const editLoanData = () => {
     if (
-      loanDetails.type &&
       loanDetails.type !== '' &&
+      loanDetails.status !== '' &&
       loanDetails.amount !== '' &&
       loanDetails.month_amount !== ''
     ) {
@@ -127,7 +127,7 @@ const LoanEdit = () => {
           message('Unable to edit record.', 'error');
         });
     } else {
-      message('Please fill all required fields', 'error');
+      message('Please fill all required fields', 'warning');
     }
   };
 

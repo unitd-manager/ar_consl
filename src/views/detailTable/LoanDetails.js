@@ -82,8 +82,7 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label>
-                        <span className="required"> *</span>
-                        Employee Name
+                        Employee Name<span className="required"> *</span>
                       </Label>
                       <Input
                         type="select"
@@ -105,8 +104,8 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label>
-                        <span className="required"> *</span>
-                        Total Loan Amount
+                       
+                        Total Loan Amount  <span className="required"> *</span>
                       </Label>
                       <Input
                         type="number"
@@ -119,8 +118,8 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label>
-                        <span className="required"> *</span>
-                        Amount Payable (per month)
+                        
+                        Amount Payable (per month) <span className="required"> *</span>
                       </Label>
                       <Input
                         type="number"
