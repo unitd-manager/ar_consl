@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Row, Col, Button } from 'reactstrap';
 import $ from 'jquery';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,6 @@ const Cards = () => {
     const loc=JSON.parse(locations);
     return locations ? Number(loc) : null;
   };
-  const navigate=useNavigate();
   const selectedLocation = getSelectedLocationFromLocalStorage();
 
   const getAllEmployees = () => {
@@ -220,7 +219,7 @@ const Cards = () => {
             return (
               <Col sm="6" lg="6" xl="4" key={blg.employee_id_duplicate}>
                 <EmployeeCard
-                  onClick={()=>{navigate(`/EmployeeEdit/${blg.employee_id_duplicate}?tab=1`)}}
+
                   image={Image}
                   id={blg.employee_id_duplicate}
                   title= {

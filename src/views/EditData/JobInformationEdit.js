@@ -200,6 +200,14 @@ useEffect(() => {
         return; // Exit the function without making the API request
       }
     }
+    else if (job.status === 'current') {
+    // If job is current, clear termination fields
+    job.termination_date = null;
+    job.termination_reason = null;
+    job.notice_period_for_termination = null;
+    job.resignation_notice_date = null;
+    job.departure_date = null;
+  }
     
     if (job.overtime === '1' && !overTimeRate) {
       // If overtime is 1 and overTimeRate is empty, show a validation error
@@ -325,7 +333,7 @@ useEffect(() => {
       <CardTitle>Step 1 (Job Information)</CardTitle>
       <CardTitle>
         <Label>Employee Name:</Label>
-        {job && job.employee_name}
+        {job && job.first_name}
       </CardTitle>
       <CardTitle>
         {/* {job && job.fin_no ? null : (

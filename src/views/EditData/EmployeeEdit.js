@@ -311,6 +311,32 @@ const EmployeeEdit = () => {
         });
 
 }
+
+const validateTabPassTypeDetails = (details) => {
+  if (details.citizen === 'Citizen') {
+    if (details.nric_no !== '') return { valid: true };
+    return { valid: false, msg: 'Please fill the NRIC No field' };
+  }
+
+  if (['DP', 'EP', 'SP'].includes(details.citizen)) {
+    if (details.fin_no !== '') return { valid: true };
+    return { valid: false, msg: 'Please fill the FIN No field' };
+  }
+
+  if (details.citizen === 'WP') {
+    if (details.fin_no !== '' && details.work_permit !== '') return { valid: true };
+    return { valid: false, msg: 'Please fill the FIN No and Work Permit No field' };
+  }
+
+  if (details.citizen === 'PR') {
+    if (details.nric_no !== '' && details.spr_year !== '') return { valid: true };
+    return { valid: false, msg: 'Please fill the NRIC No and SPR Year field' };
+  }
+
+  return { valid: false, msg: 'Please select a valid PassType' };
+};
+
+
   //update tabpasstype data
   const editTabPassTypeData = () => {
     if (tabPassTypeDetails.citizen === 'Citizen' ) {
@@ -376,11 +402,27 @@ const EmployeeEdit = () => {
   };
   //update all data
   const updateData = async () => {
+    
+    if (
+      employeeDetails.employee_name !== '' &&
+      employeeDetails.date_of_birth !== '' &&
+      employeeDetails.nationality !== '' &&
+      employeeDetails.nationality !== '' // Check if nationality is not "Please Select"
+    ) {
+        const validation = validateTabPassTypeDetails(tabPassTypeDetails);
+
+  if (validation.valid) {
     await editEmployeeData();
     await editTabPassTypeData();
     await editEQData();
     await editECData();
     await editCIData();
+  } else{
+     message(validation.msg, 'error');
+  }
+    } else {
+      message('Please fill the required fields', 'error');
+    }
   };
 
   //Attachments
