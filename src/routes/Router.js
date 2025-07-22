@@ -180,6 +180,9 @@ const JobInformationDetailsTable = Loadable(
 const PayrollManagementTable = Loadable(
   lazy(() => import('../views/smartconTables/PayrollManagement')),
 );
+
+const Receipt = Loadable(lazy(() => import('../views/smartconTables/Receipt')));
+
 const Employee = Loadable(lazy(() => import('../views/smartconTables/Employee')));
 const EmployeeDetailsTable = Loadable(lazy(() => import('../views/detailTable/EmployeeDetails')));
 const EmployeeDetailsData = Loadable(
@@ -234,6 +237,7 @@ const SettingEdit = Loadable(lazy(() => import('../views/EditData/SettingEdit'))
 const UserGroupEdit = Loadable(lazy(() => import('../views/EditData/UserGroupEdit')));
 const SmartAttendanceEdit = Loadable(lazy(() => import('../views/EditData/SmartAttendanceEdit')));
 
+const ReceiptEdit = Loadable(lazy(() => import('../views/EditData/ReceiptEdit')));
 //Reports
 const ProjectReportTable = Loadable(lazy(() => import('../views/Reports/ProjectReport')));
 const OverallSalesReportTable = Loadable(lazy(() => import('../views/Reports/OverAllSalesSummaryReport')));
@@ -300,6 +304,7 @@ const Routernew = () => {
           <Route path="/SettingEdit/:id" name="settingdata" element={<SettingEdit />}></Route>
           <Route path="/UserGroupEdit/:id" name="usergroupdata" element={<UserGroupEdit />}></Route>
           
+          <Route path="/ReceiptEdit/:id" name="receiptdata" element={<ReceiptEdit />}></Route>
 
           {/* Supplier Modal */}
          
@@ -420,6 +425,7 @@ const Routernew = () => {
           <Route path="/Finance" name="financedata" element={<FinanceTable />}></Route>
           <Route path="/Invoice" name="invoicedata" element={<InvoiceTable />}></Route>
           
+          <Route path="/Receipt" name="receiptdata" element={<Receipt />}></Route>
       
           <Route path="/Leave" name="leavedata" element={<LeaveTable />}></Route>
           <Route path="/LeaveDetails" name="leavedetailsdata" element={<LeaveDetailsTable />}></Route>
