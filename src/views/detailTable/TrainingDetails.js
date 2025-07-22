@@ -48,7 +48,7 @@ const TrainingDetails = () => {
           message('Network connection error.', 'error');
         });
     } else {
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
 
@@ -64,7 +64,7 @@ const TrainingDetails = () => {
                 <Row>
                   <Col md="12">
                     <Label>
-                      <span className="required">*</span> Title
+                       Title <span className="required">*</span>
                     </Label>
                     <Input
                       type="text"

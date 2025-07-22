@@ -93,7 +93,7 @@ const LeaveDetails = () => {
           isDateInRange(dateToCheckFromDate, emp.from_date, emp.to_date) ||
           isDateInRange(dateToCheckToDate, emp.from_date, emp.to_date)
         ) {
-          message('You already applied for that day', 'error');
+          message('You already applied for that day', 'warning');
         } else {
           const { daysInCurrentMonth, daysInNextMonth } = calculateLeaveDays(
             leaveInsertData.from_date,
@@ -121,10 +121,10 @@ const LeaveDetails = () => {
             });
         }
       } else {
-        message('Please fill all required fields', 'error');
+        message('Please fill all required fields', 'warning');
       }
     } else {
-      message('The To date should be the future date of From date', 'error');
+      message('The To date should be the future date of From date', 'warning');
     }
   };
 
