@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
- 
+
 jobs:
   deploy:
     if: ${{ github.actor == 'SyedJasmine1991' }}
@@ -41,5 +41,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "*"
+          port: 22
+          source: "./*"
           target: "/www/wwwroot/arconsultancy.unitdtechnologies.com/"
+          debug: true
