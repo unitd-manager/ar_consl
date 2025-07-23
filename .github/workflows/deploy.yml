@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-
+ 
 jobs:
   deploy:
     if: ${{ github.actor == 'SyedJasmine1991' }}
@@ -35,35 +35,11 @@ jobs:
           mv build/.* . || true
           rm -rf build
 
-      - name: 🔑 Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/authorized_keys
-          chmod 600 ~/.ssh/authorized_keys
-          # Remove ssh-keygen step as it's not needed
-          echo "Host *
-            StrictHostKeyChecking no
-            UserKnownHostsFile=/dev/null" > ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
-      - name: 🔍 Test SSH Connection
-        run: |
-          if ! ssh -i ~/.ssh/authorized_keys -o BatchMode=yes ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "echo 'Connection successful'"; then
-            echo "SSH connection failed"
-            exit 1
-          fi
-
-      - name: 📤 Deploy to aaPanel
+      - name: 📤 Deploy to aaPanel (after move)
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
-          key_path: ~/.ssh/authorized_keys
-          port: 22
-          source: "./*"
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "*"
           target: "/www/wwwroot/arconsultancy.unitdtechnologies.com/"
-          debug: true
-          strip_components: 0
-          timeout: "600s"
-          rm: false
-          overwrite: true
