@@ -3,6 +3,7 @@ import {
   Button, Input, Table, Row, Col
 } from 'reactstrap';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import api from '../../constants/api';
 
 const Receipt = () => {
@@ -115,9 +116,12 @@ const fetchData = async () => {
       <tr key={item.receipt_id}>
         <td>{index + 1}</td> {/* Serial Number */}
         <td>
+          
+                          <Link to={`/ReceiptEdit/${item.receipt_id}`}>
           <Button color="link" onClick={() => console.log('Edit', item.receipt_id)}>
             <i className="fa fa-edit" />
           </Button>
+          </Link>
         </td>
         <td>
           <i
