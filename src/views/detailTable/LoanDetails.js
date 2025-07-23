@@ -54,7 +54,7 @@ const LoanDetails = () => {
           const employeeId = loanForms.employee_id;
           message('Loan inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/LoanEdit/${insertedDataId}/${employeeId}`);
+            navigate(`/LoanEdit/${insertedDataId}/${employeeId}?tab=1`);
           }, 300);
         })
         .catch(() => {

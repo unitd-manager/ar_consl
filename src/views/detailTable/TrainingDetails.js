@@ -41,7 +41,7 @@ const TrainingDetails = () => {
           const insertedDataId = res.data.data.insertId;
           message('Training inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/TrainingEdit/${insertedDataId}`);
+            navigate(`/TrainingEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
