@@ -23,7 +23,7 @@ export default function LeavePastHistory({ PastleavesDetails, leavesDetails }) {
     { name: 'From Date' },
     { name: 'To Date' },
     { name: 'Leave Type' },
-    { name: 'No of Days (Current Month)' },
+    { name: 'No of Days' },
   ];
 
   return (

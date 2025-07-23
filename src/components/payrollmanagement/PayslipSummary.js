@@ -16,7 +16,7 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
   };
   const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const [arabic, setArabic] = useState([]);
-
+console.log('arabic',arabic);
 
   const arb =selectedLanguage === 'Arabic'
 
@@ -69,7 +69,7 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
   // return { daysInRange, weeksInRange,workingdaysInRanges,remainingDays };// Add 1 to include both start and end dates
 
   // };
-
+console.log('genlabel',genLabel);
   return (
     <div>
       <Form>
@@ -83,8 +83,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
                       {' '}
                       *
                     </span>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Start Date')?.[genLabel]}
-                
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Start Date')?.[genLabel]} */}
+                Payslip Start Date
               </Label>
                   
                   <Input
@@ -99,7 +99,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.End Date')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.End Date')?.[genLabel]} */}
+              Payslip End Date
               </Label>
                   <Input
                     type="Date"
@@ -113,7 +114,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Working Days in Month')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Working Days in Month')?.[genLabel]} */}
+              Working Days
               </Label>
                 
                   <Input
@@ -130,7 +132,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Actual worked days in month')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Actual worked days in month')?.[genLabel]} */}
+             Working Days in a Month
               </Label>
                   
                   <Input
@@ -145,7 +148,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Mode Of Payment')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Mode Of Payment')?.[genLabel]} */}
+              Mode of Payment
               </Label>
                   
                   <Input
@@ -165,7 +169,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Employee Name(DOB)')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Employee Name(DOB)')?.[genLabel]} */}
+              Employee Name
               </Label>
                  
                   <Input
@@ -186,7 +191,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Generated Date')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Generated Date')?.[genLabel]} */}
+              Payroll Generated Date
               </Label>
                   
                   <Input
@@ -200,7 +206,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Basic Pay')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Basic Pay')?.[genLabel]} */}
+              Basic Pay
               </Label>
                  
                   <Input
@@ -215,7 +222,8 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Status')?.[genLabel]}
+                {/* {arabic.find((item) => item.key_text === 'mdPayrollManagement.Status')?.[genLabel]} */}
+             Status
               </Label>
                  
                   <Input

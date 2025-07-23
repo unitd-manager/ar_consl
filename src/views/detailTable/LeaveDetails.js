@@ -47,17 +47,19 @@ const LeaveDetails = () => {
     setLeaveInsertData({ ...leaveInsertData, [e.target.name]: e.target.value });
   };
 
-  function isDateInRange(dateToCheck, fromDateArray, toDateArray) {
-    for (let i = 0; i < fromDateArray.length; i++) {
-      const fromDate = new Date(fromDateArray[i]);
-      const toDate = new Date(toDateArray[i]);
+ function isDateRangeOverlapping(newFrom, newTo, existingFromArray, existingToArray) {
+  for (let i = 0; i < existingFromArray.length; i++) {
+    const existingFrom = new Date(existingFromArray[i]);
+    const existingTo = new Date(existingToArray[i]);
 
-      if (dateToCheck >= fromDate && dateToCheck <= toDate) {
-        return true; // The date is within the range
-      }
+    // Overlap check: startA <= endB && endA >= startB
+    if (newFrom <= existingTo && newTo >= existingFrom) {
+      return true;
     }
-    return false; // The date is not within any of the ranges
   }
+  return false;
+}
+
 
   const calculateLeaveDays = (fromDate, toDate) => {
     const fromMoment = moment(fromDate);
@@ -78,67 +80,83 @@ const LeaveDetails = () => {
   };
 
   const insertLeave = () => {
-    if (new Date(leaveInsertData.to_date) >= new Date(leaveInsertData.from_date)) {
-      if (
-        leaveInsertData.employee_id !== '' &&
-        leaveInsertData.from_date !== '' &&
-        leaveInsertData.to_date !== '' &&
-        leaveInsertData.leave_type !== ''
-      ) {
-        const emp = employee.find((a) => a.employee_id === Number(leaveInsertData.employee_id));
-        const dateToCheckFromDate = new Date(leaveInsertData.from_date);
-        const dateToCheckToDate = new Date(leaveInsertData.to_date);
+  // Step 1: Check required fields first
+  if (
+    !leaveInsertData.employee_id ||
+    !leaveInsertData.from_date ||
+    !leaveInsertData.to_date ||
+    !leaveInsertData.leave_type ||
+    leaveInsertData.employee_id === 'selected' ||
+    leaveInsertData.leave_type === 'selected'
+  ) {
+    message('Please fill all required fields', 'warning', 10000); // 10 sec
+    return;
+  }
 
-        if (
-          isDateInRange(dateToCheckFromDate, emp.from_date, emp.to_date) ||
-          isDateInRange(dateToCheckToDate, emp.from_date, emp.to_date)
-        ) {
-          message('You already applied for that day', 'error');
-        } else {
-          const { daysInCurrentMonth, daysInNextMonth } = calculateLeaveDays(
-            leaveInsertData.from_date,
-            leaveInsertData.to_date
-          );
+  // Step 2: Validate from_date <= to_date
+  if (new Date(leaveInsertData.to_date) < new Date(leaveInsertData.from_date)) {
+    message('The To date should be the future date of From date', 'warning', 10000);
+    return;
+  }
 
-          leaveInsertData.no_of_days = daysInCurrentMonth;
-          leaveInsertData.no_of_days_next_month = daysInNextMonth;
-          leaveInsertData.creation_date = creationdatetime;
-          leaveInsertData.created_by = loggedInuser.first_name;
-          leaveInsertData.site_id = selectedLocation;
-          leaveInsertData.branch_id = branchId;
+  // Step 3: Check for overlapping leaves
+ const emp = employee.find((a) => a.employee_id === Number(leaveInsertData.employee_id));
+ console.log(emp);
+const dateToCheckFromDate = new Date(leaveInsertData.from_date);
+const dateToCheckToDate = new Date(leaveInsertData.to_date);
 
-          api
-            .post('/leave/insertLeave', leaveInsertData)
-            .then((res) => {
-              const insertedDataId = res.data.data.insertId;
-              message('Leave inserted successfully.', 'success');
-              setTimeout(() => {
-                navigate(`/LeavesEdit/${insertedDataId}?tab=1`);
-              }, 300);
-            })
-            .catch(() => {
-              message('Network connection error.', 'error');
-            });
-        }
-      } else {
-        message('Please fill all required fields', 'error');
-      }
-    } else {
-      message('The To date should be the future date of From date', 'error');
-    }
-  };
+// Fix here 👇
+if (
+  isDateRangeOverlapping(
+    dateToCheckFromDate,
+    dateToCheckToDate,
+    emp.from_date,
+    emp.to_date
+  )
+) {
+  message('You already applied for that day', 'warning', 10000);
+  return;
+}
+  // Step 4: All good – prepare leave data and submit
+  const { daysInCurrentMonth, daysInNextMonth } = calculateLeaveDays(
+    leaveInsertData.from_date,
+    leaveInsertData.to_date
+  );
 
-  const getEmployee = () => {
-    // api.get('/leave/getEmployee')
-    api.post('/leave/getEmployeesite', { site_id: selectedLocation })
+  leaveInsertData.no_of_days = daysInCurrentMonth;
+  leaveInsertData.no_of_days_next_month = daysInNextMonth;
+  leaveInsertData.creation_date = creationdatetime;
+  leaveInsertData.created_by = loggedInuser.first_name;
+  leaveInsertData.site_id = selectedLocation;
+  leaveInsertData.branch_id = branchId;
+
+  api
+    .post('/leave/insertLeave', leaveInsertData)
     .then((res) => {
-      res.data.data.forEach((el) => {
-        el.from_date = String(el.from_date).split(',');
-        el.to_date = String(el.to_date).split(',');
-      });
-      setEmployee(res.data.data);
+      const insertedDataId = res.data.data.insertId;
+      message('Leave inserted successfully.', 'success');
+      setTimeout(() => {
+        navigate(`/LeavesEdit/${insertedDataId}?tab=1`);
+      }, 300);
+    })
+    .catch(() => {
+      message('Network connection error.', 'error');
     });
-  };
+};
+
+
+ const getEmployee = () => {
+  api.post('/leave/getEmployeesite', { site_id: selectedLocation }).then((res) => {
+    const fixed = res.data.data.map((el) => ({
+      ...el,
+      from_date: el.from_date ? String(el.from_date).split(',') : [],
+      to_date: el.to_date ? String(el.to_date).split(',') : [],
+    }));
+    console.log('Employee Leave Data:', fixed); // DEBUG
+    setEmployee(fixed);
+  });
+};
+
 
   useEffect(() => {
     getEmployee();

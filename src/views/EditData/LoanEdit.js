@@ -104,32 +104,39 @@ const LoanEdit = () => {
 
   // Edit loan data
   const editLoanData = () => {
-    if (
-      loanDetails.type &&
-      loanDetails.type !== '' &&
-      loanDetails.amount !== '' &&
-      loanDetails.month_amount !== ''
-    ) {
-      loanDetails.modification_date = creationdatetime;
-      loanDetails.modified_by= loggedInuser.first_name;
-      api
-        .post('/loan/edit-Loan', loanDetails)
-        .then(() => {
-          if (loanDetails && loanDetails.status === 'Active') {
-            api.post('/loan/editLoanStartDate', { loan_id: id });
-            
-          }
+  const isEmpty = (val) =>
+    val === null || val === undefined || val.toString().trim() === '';
 
-          message('Record edited successfully', 'success');
-          getLoanById();
-        })
-        .catch(() => {
-          message('Unable to edit record.', 'error');
-        });
-    } else {
-      message('Please fill all required fields', 'error');
-    }
-  };
+  // Add specific validations
+  if (
+    isEmpty(loanDetails.employee_id) ||
+    isEmpty(loanDetails.type) || 
+    loanDetails.type === 'Please Select' ||  // handle dropdown placeholder
+    isEmpty(loanDetails.status) ||
+    isEmpty(loanDetails.amount) ||
+    isEmpty(loanDetails.month_amount)
+  ) {
+    message('Please fill all required fields', 'warning');
+    return;
+  }
+
+  // Set metadata
+  loanDetails.modification_date = creationdatetime;
+  loanDetails.modified_by = loggedInuser.first_name;
+
+  api
+    .post('/loan/edit-Loan', loanDetails)
+    .then(() => {
+      if (loanDetails.status === 'Active') {
+        api.post('/loan/editLoanStartDate', { loan_id: id });
+      }
+      message('Record edited successfully', 'success');
+      getLoanById();
+    })
+    .catch(() => {
+      message('Unable to edit record.', 'error');
+    });
+};
 
   useEffect(() => {
     // Check if the amount_payable becomes 0 and the closing date is not already set
@@ -210,7 +217,17 @@ const LoanEdit = () => {
   };
 
   const insertPayment = () => {
-    newpaymentData.generated_date = moment();
+
+    const isEmptyHistory = (val) =>
+    val === null || val === undefined || val.toString().trim() === '';
+
+  // Add specific validations
+  if (isEmptyHistory(newpaymentData.loan_repayment_amount_per_month) ||
+      isEmptyHistory(newpaymentData.generated_date)) {
+    message('Please fill all required fields', 'warning');
+    return;
+  }
+    
     const newLoanId = newpaymentData;
     newLoanId.loan_id = id;
     if (newLoanId.loan_repayment_amount_per_month > remainingAmount) {
@@ -246,7 +263,7 @@ const LoanEdit = () => {
           }
           setNewPaymentData({
             loan_id: '',
-            payment_date: '',
+            generated_date: moment().format('YYYY-MM-DD'),
             loan_repayment_amount_per_month: '',
             remarks: '',
           });
@@ -277,7 +294,7 @@ const LoanEdit = () => {
   
   const columns1 = [
     {
-      name: '#',
+      name: 'S.No',
     },
     {
       name: 'Date'

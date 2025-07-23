@@ -116,7 +116,7 @@ const Training = () => {
               <tr key={element.training_id}>
                 <td>{index + 1}</td>
                 <td>
-                  <Link to={`/TrainingEdit/${element.training_id}`}>
+                  <Link to={`/TrainingEdit/${element.training_id}?tab=1`}>
                     <Icon.Edit2 />
                   </Link>
                 </td>

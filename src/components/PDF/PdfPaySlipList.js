@@ -25,8 +25,8 @@ const PdfPaySlipList = ({ payroll }) => {
   }, []);
 
   const findCompany = (key) => {
-    const filteredResult = hfdata.find((e) => e.key_text === key);
-    return filteredResult.value;
+    const filteredResult = hfdata?.find((e) => e.key_text === key);
+    return filteredResult?.value;
   };
 
   //   const findCompany = (key) => {

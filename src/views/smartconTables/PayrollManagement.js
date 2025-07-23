@@ -19,7 +19,7 @@ import CommonTable from '../../components/CommonTable';
 import TerminatingPayslipModal from '../../components/PayrollManagement/TerminatingPayslipModal';
 import UpdateOtModal from '../../components/PayrollManagement/updateOtModal';
 import PrintPayslipModal from '../../components/PayrollManagement/PrintPayslipModal';
-import { columns } from '../../components/PayrollManagement/PayrollColumn';
+import { columns} from '../../components/PayrollManagement/PayrollColumn';
 import PdfPaySlipList from '../../components/PDF/PdfPaySlipList';
 
 const Payrollmanagement = () => {

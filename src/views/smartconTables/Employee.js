@@ -21,7 +21,6 @@ const Cards = () => {
     const loc=JSON.parse(locations);
     return locations ? Number(loc) : null;
   };
-  
   const selectedLocation = getSelectedLocationFromLocalStorage();
 
   const getAllEmployees = () => {
@@ -220,7 +219,7 @@ const Cards = () => {
             return (
               <Col sm="6" lg="6" xl="4" key={blg.employee_id_duplicate}>
                 <EmployeeCard
-                  onClick={`/EmployeeEdit/${blg.employee_id_duplicate}?tab=1`}
+
                   image={Image}
                   id={blg.employee_id_duplicate}
                   title= {

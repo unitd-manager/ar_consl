@@ -54,14 +54,14 @@ const LoanDetails = () => {
           const employeeId = loanForms.employee_id;
           message('Loan inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/LoanEdit/${insertedDataId}/${employeeId}`);
+            navigate(`/LoanEdit/${insertedDataId}/${employeeId}?tab=1`);
           }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
         });
     } else {
-      message('Please fill all required fields', 'error');
+      message('Please fill all required fields', 'warning');
     }
   };
 
@@ -82,8 +82,7 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label>
-                        <span className="required"> *</span>
-                        Employee Name
+                        Employee Name<span className="required"> *</span>
                       </Label>
                       <Input
                         type="select"
@@ -105,8 +104,8 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label>
-                        <span className="required"> *</span>
-                        Total Loan Amount
+                       
+                        Total Loan Amount  <span className="required"> *</span>
                       </Label>
                       <Input
                         type="number"
@@ -119,8 +118,8 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label>
-                        <span className="required"> *</span>
-                        Amount Payable (per month)
+                        
+                        Amount Payable (per month) <span className="required"> *</span>
                       </Label>
                       <Input
                         type="number"
@@ -146,10 +145,8 @@ const LoanDetails = () => {
                     <Button
                       className="shadow-none"
                       color="dark"
-                      onClick={() => {
-                        if (window.confirm('Are you sure you want to cancel  \n  \n You will lose any changes made')) {
-                          navigate(-1);
-                        }
+                      onClick={() => { 
+                          navigate('/Loan');
                       }}
                     >
                       Cancel

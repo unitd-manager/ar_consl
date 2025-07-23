@@ -17,7 +17,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
         <Col md="4">
           <FormGroup>
             <Label>
-              <span style={{ color: 'red' }}>*</span> Pass Type
+              Pass Type <span style={{ color: 'red' }}>*</span>
             </Label>
             <Input
               name="citizen"
@@ -40,7 +40,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           <Col md="4">
             <FormGroup>
               <Label>
-                <span style={{ color: 'red' }}>*</span> NRIC No
+                NRIC No <span style={{ color: 'red' }}>*</span> 
               </Label>
               <Input
                 name="nric_no"
@@ -58,7 +58,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           <Col md="4">
             <FormGroup>
               <Label>
-                <span style={{ color: 'red' }}>*</span> FIN No
+               FIN No <span style={{ color: 'red' }}>*</span> 
               </Label>
               <Input
                 name="fin_no"
@@ -91,7 +91,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           <Col md="4">
             <FormGroup>
               <Label>
-                <span style={{ color: 'red' }}>*</span> NRIC No
+               NRIC No <span style={{ color: 'red' }}>*</span> 
               </Label>
               <Input
                 name="nric_no"
@@ -139,7 +139,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
             <Col md="4">
               <FormGroup>
                 <Label>
-                  <span style={{ color: 'red' }}>*</span> Work Permit No
+                 Work Permit No <span style={{ color: 'red' }}>*</span> 
                 </Label>
                 <Input
                   name="work_permit"

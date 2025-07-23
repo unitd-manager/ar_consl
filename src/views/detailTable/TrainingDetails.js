@@ -41,14 +41,14 @@ const TrainingDetails = () => {
           const insertedDataId = res.data.data.insertId;
           message('Training inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/TrainingEdit/${insertedDataId}`);
+            navigate(`/TrainingEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
         });
     } else {
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
 
@@ -64,7 +64,7 @@ const TrainingDetails = () => {
                 <Row>
                   <Col md="12">
                     <Label>
-                      <span className="required">*</span> Title
+                       Title <span className="required">*</span>
                     </Label>
                     <Input
                       type="text"
