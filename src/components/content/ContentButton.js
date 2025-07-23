@@ -18,7 +18,7 @@ export default function ContentButton({
     // id: PropTypes.string,
     backToList: PropTypes.func,
   }; 
-  return (
+  return ( 
     <Form>
       <FormGroup>
         <ComponentCardV2>
