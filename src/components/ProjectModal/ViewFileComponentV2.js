@@ -60,14 +60,14 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
   }, []);
   const getHostnameUrl = () => {
     const { hostname } = window.location;
-    if (hostname === 'pyramid.unitdtechnologies.com') {
-      return 'https://pyramid.unitdtechnologies.com/storage/uploads/';
+    if (hostname === 'arconsultancy.unitdtechnologies.com') {
+      return 'http://192.64.114.83/ar_consl_API/storage/uploads/';
     }
-    if (hostname === 'pyramidtest.unitdtechnologies.com') {
-      return 'http://43.228.126.245/pyramidTestapi/storage/uploads/';
+    if (hostname === 'arconsultancy.unitdtechnologies.com') {
+      return 'http://192.64.114.83/ar_consl_API/storage/uploads/';
     }
     if (hostname === 'localhost.com') {
-      return 'http://localhost.com/storage/uploads/';
+      return 'http://192.64.114.83/ar_consl_API/storage/uploads/';
     }
     return '';
   };

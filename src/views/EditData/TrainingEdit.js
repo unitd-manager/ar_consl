@@ -246,8 +246,12 @@ const TrainingEdit = () => {
         }
       }
     });
+    if (trainingDetails.title !== '' &&
+      trainingDetails.from_date !== '' &&
+      trainingDetails.to_date !== ''
+    ) {
     if ((new Date(trainingDetails.to_date) == new Date(trainingDetails.from_date)) ||(new Date(trainingDetails.to_date) > new Date(trainingDetails.from_date))) {
-      if (trainingDetails.title !== '') {
+      
         trainingDetails.modification_date = creationdatetime;
         trainingDetails.modified_by= loggedInuser.first_name;
         //Update training
@@ -261,10 +265,11 @@ const TrainingEdit = () => {
             message('Unable to edit record.', 'error');
           });
       } else {
-        message('Please fill all required fields', 'error');
+       message('The To date should be the future date of From date', 'warning');
       }
     } else {
-      message('The To date should be the future date of From date', 'error');
+      
+       message('Please fill all required fields', 'warning');
     }
   };
   const deleteData = () => {

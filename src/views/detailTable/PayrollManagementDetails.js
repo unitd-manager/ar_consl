@@ -30,9 +30,9 @@ import PdfPaySlip from '../../components/PDF/PdfPaySlip';
 // import PdfTimeSheet from '../../components/PDF/PdfTimeSheet';
 import AddNote from '../../components/tender/AddNote';
 import ViewNote from '../../components/tender/ViewNote';
-import PayslipSummary from '../../components/payrollmanagement/PayslipSummary';
-import EarningDeductions from '../../components/payrollmanagement/EarningDeductions';
-import PayrollLeaveSummary from '../../components/payrollmanagement/PayrollLeaveSummary';
+import PayslipSummary from '../../components/PayrollManagement/PayslipSummary';
+import EarningDeductions from '../../components/PayrollManagement/EarningDeductions';
+import PayrollLeaveSummary from '../../components/PayrollManagement/PayrollLeaveSummary';
 import ApiButton from '../../components/ApiButton';
 
 //import Loan from '../smartconTables/Loan';

@@ -61,7 +61,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                 </Input>
               </Col>
               <Col md="4">
-                <Label>Type of Leave <span style={{ color: 'red' }}>*</span></Label>
+                <Label>Type of Leave</Label>
                 <Input
                   type="select"
                   onChange={handleInputs}
@@ -116,6 +116,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && moment(leavesDetails.from_date).format('YYYY-MM-DD')}
                   name="from_date"
+                  disabled
                 />
               </FormGroup>
             </Col>
@@ -128,12 +129,13 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   min={leavesDetails && moment(leavesDetails.from_date).format('YYYY-MM-DD')}
                   value={leavesDetails && moment(leavesDetails.to_date).format('YYYY-MM-DD')}
                   name="to_date"
+                  disabled
                 />
               </FormGroup>
             </Col>
           </Row>
           <Row>
-            <Col md="6">
+            <Col md="4">
               <FormGroup>
                 <Label>No of Days (Current Month) <span style={{ color: 'red' }}>*</span></Label>
                 <Input
@@ -141,33 +143,36 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails?.no_of_days}
                   name="no_of_days"
+                  disabled
                 />
               </FormGroup>
             </Col>
-            {difference && (
-              <Col md="3">
-                <FormGroup>
-                  <Label>No of Days (Next Month)</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={leavesDetails?.no_of_days_next_month}
-                    name="no_of_days_next_month"
-                  />
-                </FormGroup>
-              </Col>
-            )}
-            <Col md="3">
-              <FormGroup>
-                <Label>Reason</Label>
-                <Input
-                  type="textarea"
-                  onChange={handleInputs}
-                  value={leavesDetails?.reason}
-                  name="reason"
-                />
-              </FormGroup>
-            </Col>
+            <Col md="4">
+  {difference && leavesDetails?.no_of_days_next_month > 0 ? (
+    <FormGroup>
+      <Label>No of Days (Next Month)</Label>
+      <Input
+        type="text"
+        onChange={handleInputs}
+        value={leavesDetails?.no_of_days_next_month}
+        name="no_of_days_next_month"
+        disabled
+      />
+    </FormGroup>
+  ) : null}
+</Col>
+<Col md="4">
+  <FormGroup>
+    <Label>Reason</Label>
+    <Input
+      type="textarea"
+      onChange={handleInputs}
+      value={leavesDetails?.reason}
+      name="reason"
+    />
+  </FormGroup>
+</Col>
+
           </Row>
         </Form>
       </ComponentCard>

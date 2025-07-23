@@ -61,7 +61,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
               loanStatus === 'Applied') && (
               <Col md="3">
                 <FormGroup>
-                  <Label>Status</Label>
+                  <Label>Status<span style={{ color: 'red' }}>*</span>  </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
@@ -124,7 +124,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
 
             <Col md="3">
               <FormGroup>
-                <Label>Loan Application Date <span style={{ color: 'red' }}>*</span></Label>
+                <Label>Loan Application Date</Label>
                 <Input
                   value={loanDetails && loanDetails.date}
                   name="date"
@@ -138,7 +138,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
             {loanStatus !== 'Active' && loanStatus !== 'Closed' && (
               <Col md="3">
                 <FormGroup>
-                  <Label>Total Loan Amount</Label>
+                  <Label>Total Loan Amount<span style={{ color: 'red' }}>*</span></Label>
                   <Input
                     value={loanDetails && loanDetails.amount}
                     name="amount"
@@ -151,7 +151,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
             {(loanStatus === 'Active' || loanStatus === 'Closed') && (
               <Col md="3">
                 <FormGroup>
-                  <Label>Total Loan Amount</Label>
+                  <Label>Total Loan Amount<span style={{ color: 'red' }}>*</span></Label>
                   <br />
                   <span>{loanDetails && loanDetails.amount}</span>
                 </FormGroup>
@@ -159,7 +159,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
             )}
             <Col md="3">
               <FormGroup>
-                <Label>Amount Payable</Label>
+                <Label>Amount Payable<span style={{ color: 'red' }}>*</span></Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
