@@ -10,7 +10,7 @@ export default function ContentButton({
   editContentData,
   navigate,
   // id
-}) {
+}) { 
   ContentButton.propTypes = {
     editContentData: PropTypes.func,
     navigate: PropTypes.func,
