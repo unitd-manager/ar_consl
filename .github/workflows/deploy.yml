@@ -35,13 +35,21 @@ jobs:
           mv build/.* . || true
           rm -rf build
 
-      - name: 📤 Deploy to aaPanel (after move)
+      - name: 🔑 Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: 📤 Deploy to aaPanel
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key_path: ~/.ssh/deploy_key
           source: "*"
           target: "/www/wwwroot/arconsultancy.unitdtechnologies.com/"
-          timeout: 600s  # Increase timeout to 10 minutes
-          command_timeout: 30m  # Increase command timeout
+          timeout: 600s
+          command_timeout: 30m
+          debug: true
