@@ -22,10 +22,13 @@ const ReceiptEdit = () => {
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [RoomName, setRoomName] = useState('')
   const [fileTypes, setFileTypes] = useState('')
-  const [valuelist, setValuelist] = useState();
-  const [pictureData, setDataForPicture] = useState({
-    modelType: '',
-  }); 
+  //const [valuelist, setValuelist] = useState();
+  
+      const [attachmentData, setDataForAttachment] = useState({
+        modelType: '',
+      });
+      
+        const [update, setUpdate] = useState(false);
      // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
@@ -33,13 +36,12 @@ const ReceiptEdit = () => {
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
- 
-  // Abi for Picture attachment
-  const dataForPicture = () => {
-    setDataForPicture({
-      modelType: 'picture',
+  const dataForAttachment = () => {
+    setDataForAttachment({
+      modelType: 'attachment',
     });
   };
+
 
   //  button position
   const applyChanges = () => {};
@@ -50,7 +52,7 @@ const ReceiptEdit = () => {
 //  Get section by id
   const editSectionyId = () => {
     api
-      .post('/section/getreceiptById', { receipt_id: id })
+      .post('/receipt/getReceiptById', { receipt_id: id })
       .then((res) => {
         setSection(res.data.data[0]);
       })
@@ -64,10 +66,9 @@ const ReceiptEdit = () => {
   };
   //Logic for section edit data in db
   const editSectionData = () => {
-    if(section.section_title !== ''){
       section.modification_date = creationdatetime
     api
-      .post('/section/editSection', section)
+      .post('/receipt/updateReceipt', section)
       .then(() => {
         message('Record editted successfully', 'success');
         editSectionyId();
@@ -77,9 +78,7 @@ const ReceiptEdit = () => {
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
-    }else{
-      message('Please fill all required fields','warning');
-      }
+   
   };
   // delete section
   const DeleteSection = () => {
@@ -92,20 +91,20 @@ const ReceiptEdit = () => {
         message('Unable to edit record.', 'error');
       });
   };
-  //Api call for getting valuelist dropdown
-  const getValuelist = () => {
-    api
-      .get('/section/getValueList')
-      .then((res) => {
-        setValuelist(res.data.data);
-      })
-      .catch(() => {
-        message('valuelist not found', 'info');
-      });
-  };
+  // //Api call for getting valuelist dropdown
+  // const getValuelist = () => {
+  //   api
+  //     .get('/section/getValueList')
+  //     .then((res) => {
+  //       setValuelist(res.data.data);
+  //     })
+  //     .catch(() => {
+  //       message('valuelist not found', 'info');
+  //     });
+  // };
   useEffect(() => {
     editSectionyId();
-    getValuelist();
+    //getValuelist();
   }, [id]);
 
   return (
@@ -156,10 +155,15 @@ const ReceiptEdit = () => {
                     <option defaultValue="selected">
                       Please Select
                     </option>
-                    {valuelist &&
-                      valuelist.map((e) => {
-                        return <option key={e.value} value={e.value}>{e.value}</option>;
-                      })}
+                    <option value="cash">
+                      Cash
+                    </option>
+                    <option value="cheque">
+                      Cheque
+                    </option>
+                    <option value="Bank Transfer">
+                      Bank Transfer
+                    </option>
                   </Input>
                 </FormGroup>
               </Col>
@@ -169,16 +173,21 @@ const ReceiptEdit = () => {
                   <Input
                     type="select"
                     onChange={handleInputs}
-                    value={section && section.status}
-                    name="status"
+                    value={section && section.receipt_status}
+                    name="receipt_status"
                   >
                     <option defaultValue="selected">
                       Please Select
                     </option>
-                    {valuelist &&
-                      valuelist.map((e) => {
-                        return <option key={e.value} value={e.value}>{e.value}</option>;
-                      })}
+                    <option value="paid">
+                      Paid
+                    </option>
+                    <option value="unpaid">
+                      Unpaid
+                    </option>
+                    <option value="partially_paid">
+                      Partially Paid
+                    </option>
                   </Input>
                 </FormGroup>
               </Col>
@@ -211,41 +220,53 @@ const ReceiptEdit = () => {
               className={activeTab === '1' ? 'active' : ''}
               onClick={() => {
                 toggle('1');
-              }}>Picture
+              }}>Attachment
             </NavLink>
           </NavItem>
         </Nav>
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-          <Form>
-        <FormGroup>
-            <Row>
-              <Col xs="12" md="3" className="mb-3">
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  onClick={() => {
-                    setRoomName('ReceiptPic')
-                    setFileTypes(["JPG", "PNG", "GIF"]);
-                    dataForPicture();
-                    setAttachmentModal(true);}}><Icon.Image className="rounded-circle" width="20" /></Button>
-              </Col>
-            </Row>
-            <AttachmentModalV2
-              moduleId={id}
-              attachmentModal={attachmentModal}
-              setAttachmentModal={setAttachmentModal}
-              roomName={RoomName}
-              fileTypes={fileTypes}
-              altTagData="Receipt Data"
-              desc="Receipt Data"
-              recordType="Picture"
-              mediaType={pictureData.modelType}
-            />
-            <ViewFileComponentV2 moduleId={id} roomName="ReceiptPic" recordType="Picture" />
-        </FormGroup>
-      </Form>
-            </TabPane>
+            <Form>
+              <FormGroup>
+                <Row>
+                  <Col xs="12" md="3" className="mb-3">
+                    <Button
+                      className="shadow-none"
+                      color="primary"
+                      onClick={() => {
+                        setRoomName('Receipt');
+                        setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+                        dataForAttachment();
+                        setAttachmentModal(true);
+                      }}
+                    >
+                      <Icon.File className="rounded-circle" width="20" />
+                    </Button>
+                  </Col>
+                </Row>
+                <AttachmentModalV2
+                  moduleId={id}
+                  attachmentModal={attachmentModal}
+                  setAttachmentModal={setAttachmentModal}
+                  roomName={RoomName}
+                  fileTypes={fileTypes}
+                  altTagData="Receipt Data"
+                  desc="Receipt Data"
+                  recordType="RelatedPicture"
+                  mediaType={attachmentData.modelType}
+                  update={update}
+                  setUpdate={setUpdate}
+                />
+                <ViewFileComponentV2
+                  moduleId={id}
+                  roomName="Receipt"
+                  recordType="RelatedPicture"
+                  update={update}
+                  setUpdate={setUpdate}
+                />
+              </FormGroup>
+            </Form>
+          </TabPane>
         </TabContent>
       </ComponentCard>
     </>

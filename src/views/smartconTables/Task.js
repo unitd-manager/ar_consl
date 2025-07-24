@@ -24,23 +24,33 @@ const TaskList = () => {
   const [projectList, setProjectList] = useState([]);
   const [teamList, setTeamList] = useState([]);
 
-  // Fetch filter dropdown data
-  const fetchFilterData = async () => {
-    try {
-      const [staffRes, companyRes, projectRes, teamRes] = await Promise.all([
-        api.get('/task/getStaffList'),
-        api.get('/task/getCompanyList'),
-        api.get('/task/getProjectList'),
-        api.get('/task/getTeamList'),
-      ]);
-      setStaffList(staffRes.data);
-      setCompanyList(companyRes.data);
-      setProjectList(projectRes.data);
-      setTeamList(teamRes.data);
-    } catch (err) {
-      console.error('Error loading dropdowns:', err);
-    }
+  
+   // Fetch dropdowns
+  const getDropdowns = () => {
+    api.get('/task/getProjects').then((res) =>{ setProjectList(res.data.data);
+console.log('projectres',res.data.data);}).catch(() => {
+       
+      })
+      ;
+    api.get('/task/getStaff').then((res) =>{ setStaffList(res.data.data);
+console.log('projectres',res.data.data);}).catch(() => {
+        
+       
+      });
+      api.get('/task/getCompanies').then((res) =>{ setCompanyList(res.data.data);
+console.log('companyres',res.data.data);}).catch(() => {
+       
+      })
+      ;
+    api.get('/task/getTeams').then((res) =>{ setTeamList(res.data.data);
+console.log('teamres',res.data.data);}).catch(() => {
+
+      });
   };
+
+  useEffect(() => {
+    getDropdowns();
+  }, []);
 
   // Fetch filtered task data
   const fetchData = async () => {
@@ -59,7 +69,6 @@ const TaskList = () => {
   };
 
   useEffect(() => {
-    fetchFilterData();
     fetchData();
   }, [currentPage]);
 
@@ -115,7 +124,7 @@ const TaskList = () => {
           <Input type="select" name="project" value={filters.project} onChange={handleFilterChange}>
             <option value="">Select Project</option>
             {projectList.map((p) => (
-              <option key={p.project_id} value={p.project_id}>{p.name}</option>
+              <option key={p.project_id} value={p.project_id}>{p.title}</option>
             ))}
           </Input>
         </Col>
@@ -190,18 +199,19 @@ const TaskList = () => {
                   onClick={() => console.log('Flag clicked', task.task_id)}
                 />
               </td>
-              <td>{task.code}</td>
-              <td>{task.company_name}</td>
-              <td>{task.project_name}</td>
-              <td>{task.task_type}</td>
-              <td>{task.title}</td>
-              <td>{task.staff}</td>
-              <td>{task.team}</td>
-              <td>{moment(task.due_date).format('YYYY-MM-DD')}</td>
-              <td>{task.status}</td>
-              <td>{task.estimated_hours}</td>
-              <td>{task.total_hours}</td>
-              <td>{task.time_spent}</td>
+              <td>{task.task_code}</td>
+<td>{task.company_name}</td>
+<td>{task.title}</td>
+<td>{task.type}</td>
+<td>{task.task_title}</td>
+<td>{task.staff_name}</td>
+<td>{task.team}</td>
+<td>{task.due_date?moment(task.due_date).format('YYYY-MM-DD'):''}</td>
+<td>{task.status}</td>
+<td>{task.estimated_hours}</td>
+<td>{task.total_hours}</td>
+<td>{task.time}</td>
+
             </tr>
           )) : (
             <tr>

@@ -245,7 +245,7 @@ const InvoiceByYearTable = Loadable(lazy(() => import('../views/Reports/InvoiceB
 const ArReturnNotfiledCompanyReportTable = Loadable(lazy(() => import('../views/Reports/ArReturnNotfiledCompanyReport')));
 const CompanyYearEndReport = Loadable(lazy(() => import('../views/Reports/CompanyYearEndReport')));
 const AgmNotFiledReport = Loadable(lazy(() => import('../views/Reports/AgmNotFiledReport')));
-// const TaskEdit= Loadable(lazy(() => import ('..')))
+const TaskEdit= Loadable(lazy(() => import ('../views/EditData/TaskEdit')));
 const FormcsCompanyReportTable = Loadable(lazy(() => import('../views/Reports/FormcsCompanyReport')));
 
 
@@ -279,7 +279,7 @@ const Routernew = () => {
           <Route path="/receiptModal/:id" name="invoiceModal" element={<ReceiptModal/>}></Route>
       {/* Table Edit's */}
           {/* <Route path="/ContentEdit/:title" name="clienttdata" element={<ContentEdit />}></Route> */}
-          {/* <Route path="/TaskEdit/:id" name="clienttdata" element={<TaskEdit />}></Route> */}
+          <Route path="/TaskEdit/:id" name="clienttdata" element={<TaskEdit />}></Route>
           <Route path="/FinanceEdit/:id" name="financedata" element={<FinanceEdit />}></Route>
                     <Route path="/TranslationEdit/:id" name="translationdata" element={<TranslationEdit />}></Route>
           <Route path="/TrainingEdit/:id" name="trainingdata" element={<TrainingEdit />}></Route>
