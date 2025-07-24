@@ -43,3 +43,5 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "*"
           target: "/www/wwwroot/arconsultancy.unitdtechnologies.com/"
+          timeout: 600s  # Increase timeout to 10 minutes
+          command_timeout: 30m  # Increase command timeout
