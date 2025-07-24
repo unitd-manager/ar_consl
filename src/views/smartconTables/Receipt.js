@@ -12,27 +12,36 @@ const Receipt = () => {
     to_date:'',
     receipt_code: '',
     amount: '',
-    company_name: '',
+    supplier_id: '',
     mode_of_payment:'',
-    status: '',
-    date: '',
+    receipt_status: '',
+    receipt_date: '',
   });
 
   const [goodsReturns, setGoodsReturns] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  
+  const [supplierList, setSupplierList]=useState([]);
+// Fetch dropdowns
+  const getDropdowns = () => {
+    api.get('/receipt/getSuppliers').then((res) =>{ setSupplierList(res.data.data);
+console.log('suppliers',res.data.data);}).catch(() => {
+       
+      });
+  };
 
+  useEffect(() => {
+    getDropdowns();
+  }, []);
 const fetchData = async () => {
   try {
-    const res = await api.get('/purchaseorder/getFilteredReceipts', {
+    const res = await api.get('/receipt/getFilteredReceipts', {
       params: {
-        tran_no: filters.receipt_code || '',
         from_date: filters.from_date || '',
         to_date: filters.to_date || '',
-        status: filters.status || '',
+        receipt_status: filters.receipt_status || '',
         supplier_id: filters.supplier_id || '',
-        invoice_no: filters.mode_of_payment || '',
+        mode_of_payment: filters.mode_of_payment || '',
       }
     });
 
@@ -77,13 +86,27 @@ const fetchData = async () => {
         <Col md={2}>
           <Input type="select" name="status" value={filters.status} onChange={handleFilterChange}>
           <option></option>
-            <option>Open</option>
-            <option>Closed</option>
+            <option>paid</option>
+            <option>unpaid</option>
+            <option>closed</option>
             <option>Cancelled</option>
           </Input>
         </Col>
-        <Col md={2}><Input name="supplier" placeholder="Select All Supplier" value={filters.supplier} onChange={handleFilterChange} /></Col>
-        <Col md={2}><Input name="mode_of_payment" placeholder="Invoice No" value={filters.mode_of_payment} onChange={handleFilterChange} /></Col>
+       <Col md={2}>
+  <Input type="select" name="supplier_id" value={filters.supplier_id} onChange={handleFilterChange}>
+    <option value="">Select Supplier</option>
+    {supplierList.map((supplier) => (
+      <option key={supplier.supplier_id} value={supplier.supplier_id}>
+        {supplier.company_name}
+      </option>
+    ))}
+  </Input>
+</Col>
+
+       <Col md={2}>
+  <Input type="text" name="mode_of_payment" placeholder="Mode of Payment" value={filters.mode_of_payment} onChange={handleFilterChange} />
+</Col>
+
       </Row>
 
       <Row className="mb-3">
@@ -135,7 +158,7 @@ const fetchData = async () => {
         <td>{item.company_name}</td>
         <td>{item.mode_of_payment}</td>
         <td>{item.status}</td>
-        <td>{moment(item.date).format('YYYY-MM-DD')}</td>
+        <td>{moment(item.receipt_date).format('YYYY-MM-DD')}</td>
         <td>{item.invoice_id}</td>
         <td>{item.receipt_id}</td>
       </tr>
