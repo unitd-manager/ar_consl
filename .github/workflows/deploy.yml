@@ -41,6 +41,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
           source: "*"
           target: "/www/wwwroot/arconsultancy.unitdtechnologies.com/"
           timeout: "120s"
