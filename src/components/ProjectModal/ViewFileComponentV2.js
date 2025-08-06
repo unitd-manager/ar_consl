@@ -61,13 +61,13 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
   const getHostnameUrl = () => {
     const { hostname } = window.location;
     if (hostname === 'arconsultancy.unitdtechnologies.com') {
-      return 'http://192.64.114.83/ar_consl_API/storage/uploads/';
+      return 'https://arconsultancy.unitdtechnologies.com/storage/uploads/';
     }
     if (hostname === 'arconsultancy.unitdtechnologies.com') {
-      return 'http://192.64.114.83/ar_consl_API/storage/uploads/';
+      return 'https://arconsultancy.unitdtechnologies.com/storage/uploads/';
     }
     if (hostname === 'localhost.com') {
-      return 'http://192.64.114.83/ar_consl_API/storage/uploads/';
+      return 'https://arconsultancy.unitdtechnologies.com/storage/uploads/';
     }
     return '';
   };
