@@ -44,13 +44,13 @@ const InvoiceModal = ({ editInvoiceModal, editModal, setEditModal,invoiceDatas }
   // const [invoiceData, setInvoiceData] = useState({});
   // const { id } = useParams();
   //Add Line Item
-const [addLineItem, setAddLineItem] = useState({
+const [addLineItem, setAddLineItem] = useState([{
   item_title: '',
   description: '',
   qty: 0,
   unit_price: 0,
   total_cost: 0,
-});
+}]);
 
 
   //setting value in invoiceData
@@ -355,7 +355,7 @@ const [addLineItem, setAddLineItem] = useState({
     </tr>
   </thead>
   <tbody>
-  {addLineItem && addLineItem.map((item, index) => (
+  {addLineItem && addLineItem?.map((item, index) => (
     <tr key={index}>
       <td>
         <Input
