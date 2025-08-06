@@ -110,7 +110,7 @@ const [addLineItem, setAddLineItem] = useState([{
     api
       .post('/invoice/getInvoiceItemsById', { invoice_id: editInvoiceModal.invoice_id })
       .then((res) => {
-        setAddLineItem(res.data.data[0]);
+        setAddLineItem(res.data.data);
       })
       .catch(() => {
         message('Line Items not found', 'info');
