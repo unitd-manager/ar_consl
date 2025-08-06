@@ -6,15 +6,15 @@ import api from '../../constants/api';
 
 const TenderSummaryBarChart = () => {
 
-  const [tender, setTender] = useState();
-  const [amount, setAmount] = useState();
+  const [tender, setTender] = useState([]);
+  const [amount, setAmount] = useState([]);
   
   const getTenders = () => {
     const comapnyNames = [];
     const totalQuoteAmt = []
     api.get('/tender/getTenderSummaryId').then((res) => {
       console.log(res.data.data)
-      res.data.data.forEach((e) =>{
+      res.data.data?.forEach((e) =>{
         comapnyNames.push(e.company_name)
         totalQuoteAmt.push(e.total_amount)
       })

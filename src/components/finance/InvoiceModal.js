@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import {
   Card,
@@ -43,16 +44,40 @@ const InvoiceModal = ({ editInvoiceModal, editModal, setEditModal,invoiceDatas }
   // const [invoiceData, setInvoiceData] = useState({});
   // const { id } = useParams();
   //Add Line Item
-  const [addLineItem, setAddLineItem] = useState();
+const [addLineItem, setAddLineItem] = useState([{
+  item_title: '',
+  description: '',
+  qty: 0,
+  unit_price: 0,
+  total_cost: 0,
+}]);
+
 
   //setting value in invoiceData
   const handleInputs = (e) => {
     setInvoiceData({ ...invoiceData, [e.target.name]: e.target.value });
   };
 
-  const handleLineInputs = (e) => {
-    setAddLineItem({ ...addLineItem, [e.target.name]: e.target.value });
+  const handleLineInputs = (e, index) => {
+  const { name, value } = e.target;
+  const updatedItems = [...addLineItem];
+  updatedItems[index] = {
+    ...updatedItems[index],
+    [name]: value,
   };
+
+  // Automatically calculate total_cost when qty or unit_price changes
+  if (name === 'qty' || name === 'unit_price') {
+    const qty = parseFloat(updatedItems[index].qty) || 0;
+    const unitPrice = parseFloat(updatedItems[index].unit_price) || 0;
+    updatedItems[index].total_cost = qty * unitPrice;
+  }
+
+  setAddLineItem(updatedItems);
+};
+
+
+  
   // const handleDataEditor = (e, type) => {
   //   SetInvoiceData({
   //     ...invoiceData,
@@ -319,44 +344,65 @@ const InvoiceModal = ({ editInvoiceModal, editModal, setEditModal,invoiceDatas }
                             }}
                           /> */}
                         </Row>
-                        <Table bordered className="lineitem">
-                          <thead>
-                            <tr>
-                              <th scope="col">Title</th>
-                              <th scope="col">Description</th>
-                              <th scope="col">Amount</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td data-label="Item">
-                                <Input
-                                  type="text"
-                                  name="item_title"
-                                  defaultValue={addLineItem && addLineItem.item_title}
-                                  onChange={handleLineInputs}
-                                />
-                              </td>
-                              <td data-label="Description">
-                                <Input
-                                  defaultValue={addLineItem && addLineItem.description}
-                                  type="text"
-                                  name="description"
-                                  onChange={handleLineInputs}
-                                />
-                              </td>
-                              <td data-label="Amount">
-                                <Input
-                                  value={addLineItem && addLineItem.total_cost}
-                                  type="text"
-                                  name="total_cost"
-                                  onChange={handleLineInputs}
-                                  disabled
-                                />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </Table>
+                       <Table bordered className="lineitem">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Qty</th>
+      <th>Unit Price</th>
+      <th>Total Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+  {addLineItem && addLineItem?.map((item, index) => (
+    <tr key={index}>
+      <td>
+        <Input
+          type="text"
+          name="item_title"
+          value={item?.item_title || ''}
+          onChange={(e) => handleLineInputs(e, index)}
+        />
+      </td>
+      <td>
+        <Input
+          type="text"
+          name="description"
+          value={item?.description || ''}
+          onChange={(e) => handleLineInputs(e, index)}
+        />
+      </td>
+      <td>
+        <Input
+          type="number"
+          name="qty"
+          value={item?.qty || ''}
+          onChange={(e) => handleLineInputs(e, index)}
+        />
+      </td>
+      <td>
+        <Input
+          type="number"
+          name="unit_price"
+          value={item?.unit_price || ''}
+          onChange={(e) => handleLineInputs(e, index)}
+        />
+      </td>
+      <td>
+        <Input
+          type="number"
+          name="total_cost"
+          value={item?.total_cost || 0}
+          disabled
+        />
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+</Table>
+
                         {/*                       
                             <Row>
                             <Col md="3">

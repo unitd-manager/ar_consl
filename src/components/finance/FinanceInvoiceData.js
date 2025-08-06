@@ -61,6 +61,8 @@ const FinanceInvoiceData = ({ editInvoiceData, setEditInvoiceData, projectInfo, 
       id: random.int(1, 99),
       total_cost: '',
       item_title: '',
+      qty: '',
+      unit_price: '',
       description: '',
     },
   ]);
@@ -83,6 +85,16 @@ const FinanceInvoiceData = ({ editInvoiceData, setEditInvoiceData, projectInfo, 
       [type]: draftToHtml(convertToRaw(e.getCurrentContent())),
     });
   };
+const handleLineItemChange = (index, field, value) => {
+  const updatedItems = [...addLineItem];
+  updatedItems[index][field] = value;
+
+  const qty = parseFloat(updatedItems[index].qty) || 0;
+  const unitPrice = parseFloat(updatedItems[index].unit_price) || 0;
+  updatedItems[index].total_cost = (qty * unitPrice).toFixed(2);
+
+  setAddLineItem(updatedItems);
+};
 
   //Insert Invoice Item
   const addLineItemApi = (obj) => {
@@ -177,6 +189,8 @@ const FinanceInvoiceData = ({ editInvoiceData, setEditInvoiceData, projectInfo, 
         id: new Date().getTime().toString(),
         total_cost: '',
         item_title: '',
+        qty: '',
+        unit_price: '',
         description: '',
       },
     ]);
@@ -281,40 +295,73 @@ const FinanceInvoiceData = ({ editInvoiceData, setEditInvoiceData, projectInfo, 
                           <tr>
                             <th scope="col">Item</th>
                             <th scope="col">Description </th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Unit Price</th>
                             <th scope="col">Total Price</th>
                             <th scope="col"></th>
                           </tr>
                         </thead>
                         <tbody>
-                          {addLineItem && addLineItem.map((item) => {
-                            return (
-                              <tr key={item.id}>
-                               <td data-label="Item">
-                               <Input Value={item.item_title} type="text" name="item_title" />
-                               </td>
-                               <td data-label="Description">
-                               <Input Value={item.description} type="text" name="description" />
-                                </td>
-                                <td data-label="Total Price">
-                                 <Input Value={item.total_cost} type="number" name="total_cost" />
-                                 </td>
+  {addLineItem && addLineItem.map((item, index) => {
+    return (
+      <tr key={item.id}>
+        <td data-label="Item">
+          <Input
+            value={item.item_title}
+            type="text"
+            name="item_title"
+            onChange={(e) => handleLineItemChange(index, 'item_title', e.target.value)}
+          />
+        </td>
+        <td data-label="Description">
+          <Input
+            value={item.description}
+            type="text"
+            name="description"
+            onChange={(e) => handleLineItemChange(index, 'description', e.target.value)}
+          />
+        </td>
+        <td data-label="Qty">
+          <Input
+            value={item.qty}
+            type="number"
+            name="qty"
+            onChange={(e) => handleLineItemChange(index, 'qty', e.target.value)}
+          />
+        </td>
+        <td data-label="Unit Price">
+          <Input
+            value={item.unit_price}
+            type="number"
+            name="unit_price"
+            onChange={(e) => handleLineItemChange(index, 'unit_price', e.target.value)}
+          />
+        </td>
+        <td data-label="Total Price">
+          <Input
+            value={item.total_cost}
+            type="number"
+            name="total_cost"
+            readOnly
+          />
+        </td>
+        <td data-label="Action">
+          <div className="anchor">
+            <Input type="hidden" name="id" value={item.id}></Input>
+            <span
+              onClick={() => {
+                ClearValue(item);
+              }}
+            >
+              Clear
+            </span>
+          </div>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
 
-                                <td data-label="Action">
-                                  <div className="anchor">
-                                    <Input type="hidden" name="id" Value={item.id}></Input>
-                                    <span
-                                      onClick={() => {
-                                        ClearValue(item);
-                                      }}
-                                    >
-                                      Clear
-                                    </span>
-                                  </div>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
                       </table>
                     </Col>
                   </Row>

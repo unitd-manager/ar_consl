@@ -25,7 +25,7 @@ export default function ProjectTaskTab({
   handleAddNewTask,
   newTaskData,
   AddNewTask,
-  contact,
+  incharge,
   deleteRecordTask,
   employeeDetails,
 }) {
@@ -38,7 +38,7 @@ export default function ProjectTaskTab({
     handleAddNewTask: PropTypes.func,
     newTaskData: PropTypes.object,
     AddNewTask: PropTypes.func,
-    contact: PropTypes.any,
+    incharge: PropTypes.any,
     deleteRecordTask: PropTypes.any,
     employeeDetails: PropTypes.any,
   };
@@ -122,10 +122,11 @@ export default function ProjectTaskTab({
                               name="status"
                             >
                               <option defaultValue="selected">Please Select</option>
-                              <option value="Others">Others</option>
-                              <option value="Due">Due</option>
-                              <option value="Late">Late</option>
-                              <option value="Complete">Complete</option>
+
+                              <option value="Not Started">Not Started</option>
+                              <option value="In Progress">In Progress</option>
+                              <option value="Pending">Pending</option>
+                              <option value="Completed">Completed</option>
                               <option value="Cancelled">Cancelled</option>
                             </Input>
                           </FormGroup>
@@ -180,14 +181,14 @@ export default function ProjectTaskTab({
                               value={newTaskData && newTaskData.project_manager_id}
                             >
                               <option value="selected">Please Select</option>
-                              {contact &&
-                                contact.map((ele) => {
-                                  return (
-                                    <option key={ele.contact_id} value={ele.first_name}>
-                                      {ele.first_name}
-                                    </option>
-                                  );
-                                })}
+                             {incharge &&
+                      incharge.map((ele) => {
+                        return (
+                          <option value={ele.employee_id} key={ele.first_name}>
+                          {ele.first_name}
+                        </option>
+                        );
+                      })}
                             </Input>
                           </FormGroup>
                         </Col>
@@ -267,7 +268,7 @@ export default function ProjectTaskTab({
                               {employeeDetails &&
                                 employeeDetails.map((ele) => {
                                   return (
-                                    <option key={ele.employee_id} value={ele.first_name}>
+                                    <option key={ele.employee_id} value={ele.employee_id}>
                                       {ele.first_name}
                                     </option>
                                   );
