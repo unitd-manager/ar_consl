@@ -136,10 +136,10 @@ export default function FinanceTab({ projectDetail }) {
     api
       .post('/Finance/editTabReceiptPortalDisplay', obj)
       .then(() => {
-        message('Record editted successfully', 'success');
+        message('Receipt has been Cancelled successfully', 'success');
       })
       .catch(() => {
-        message('Unable to edit record.', 'error');
+        message('Unable to cancel the receipt.', 'error');
       });
   };
   useEffect(() => {

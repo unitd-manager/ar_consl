@@ -100,7 +100,7 @@ const ProjectEdit = () => {
         setcontact(res.data.data);
       })
       .catch(() => {
-        message('Conatct Data Not Found', 'info');
+       // message('Conatct Data Not Found', 'info');
       });
   };
   // Edit Project
@@ -132,7 +132,7 @@ const ProjectEdit = () => {
         console.log(res.data.data);
       })
       .catch(() => {
-        message('No Incharge found', 'info');
+       // message('No Incharge found', 'info');
       });
   };
   const getTaskById = () => {
@@ -180,12 +180,13 @@ const ProjectEdit = () => {
   const AddNewTask = () => {
     const newContactWithCompanyId = newTaskData;
     newContactWithCompanyId.project_id = id;
+    console.log('taskto add', newContactWithCompanyId);
     api
       .post('/project/insertTask', newContactWithCompanyId)
       .then(() => {
         // const insertedDataId = res.data.data.insertId;
         message('Share inserted successfully.', 'success');
-        window.location.reload();
+        //window.location.reload();
       })
       .catch(() => {
         message('Network connection error.', 'error');
@@ -297,6 +298,7 @@ const ProjectEdit = () => {
               newTaskData={newTaskData}
               AddNewTask={AddNewTask}
               contact={contact}
+              incharge={incharge}
               employeeDetails={employeeDetails}
             ></ProjectTaskTab>
             <ProjectEditTaskModel
