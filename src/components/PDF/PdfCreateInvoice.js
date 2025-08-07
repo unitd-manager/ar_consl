@@ -85,37 +85,33 @@ const PdfCreateInvoice = ({ invoiceId }) => {
         '\n',
         {
   columns: [
-    {
-      stack: [
+   {
+  table: {
+    widths: ['*'],
+    body: [
+      [
         {
-          text: 'Bill To',
-          style: ['textSize'],
-          bold: true,
-          margin: [0, 0, 0, 5],
-        },
-        {
-          text: `${createInvoice.company_name || ''}`,
-          style: ['textSize'],
-        },
-        {
-          text: `${createInvoice.address_flat || ''}`,
-          style: ['textSize'],
-        },
-        {
-          text: `${createInvoice.address_street || ''}`,
-          style: ['textSize'],
-        },
-        {
-          text: `${createInvoice.address_country || ''}`,
-          style: ['textSize'],
-        },
-        {
-          text: `${createInvoice.address_po_code || ''}`,
-          style: ['textSize'],
+          stack: [
+            { text: 'Bill To:', style: 'textSize', bold: true, margin: [0, 0, 0, 5] },
+            { text: `${createInvoice.company_name || ''}`, style: 'textSize' },
+            { text: `${createInvoice.address_flat || ''}`, style: 'textSize' },
+            { text: `${createInvoice.address_street || ''}`, style: 'textSize' },
+            { text: `${createInvoice.address_country || ''}`, style: 'textSize' },
+            { text: `${createInvoice.address_po_code || ''}`, style: 'textSize' },
+          ],
         },
       ],
-      width: '50%',
-    },
+    ],
+  },
+  layout: {
+    hLineWidth: () => 1,
+    vLineWidth: () => 1,
+    hLineColor: () => '#000',
+    vLineColor: () => '#000',
+  },
+  width: '50%',
+},
+
     {
       table: {
         widths: ['auto', 'auto'],
@@ -167,13 +163,13 @@ const PdfCreateInvoice = ({ invoiceId }) => {
           },
           table: {
             headerRows: 1,
-            widths: [70, '*', 50, 70, 70],
+            widths: [70, '*', 50, 70, 80],
             body: productItems,
           },
         },
         {
         table: {
-          widths: ['*', 80],
+          widths: ['*', 92],
           body: [
             [
               {

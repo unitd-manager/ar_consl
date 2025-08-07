@@ -287,7 +287,7 @@ export default function ProjectTaskTab({
                   color="primary"
                   onClick={() => {
                     AddNewTask();
-                    //addContactModals(false);
+                    addContactModals(false);
                   }}
                 >
                   Submit
@@ -339,7 +339,7 @@ export default function ProjectTaskTab({
                     <td>{element.status}</td>
                     <td>{element.due_date}</td>
                     <td>{element.select_date}</td>
-                    <td>{element.employee_id}</td>
+                    <td>{element.first_name}</td>
                   </tr>
                 );
               })}

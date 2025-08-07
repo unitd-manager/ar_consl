@@ -185,7 +185,7 @@ const ProjectEdit = () => {
       .post('/project/insertTask', newContactWithCompanyId)
       .then(() => {
         // const insertedDataId = res.data.data.insertId;
-        message('Share inserted successfully.', 'success');
+        message('Task inserted successfully.', 'success');
         //window.location.reload();
       })
       .catch(() => {
