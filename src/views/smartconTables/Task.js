@@ -19,12 +19,12 @@ const TaskList = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [staffList, setStaffList] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [companyList, setCompanyList] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [teamList, setTeamList] = useState([]);
 
-  
+  console.log('teamList',teamList);
    // Fetch dropdowns
   const getDropdowns = () => {
     api.get('/task/getProjects').then((res) =>{ setProjectList(res.data.data);
@@ -32,12 +32,12 @@ console.log('projectres',res.data.data);}).catch(() => {
        
       })
       ;
-    api.get('/task/getStaff').then((res) =>{ setStaffList(res.data.data);
+    api.get('/task/getEmployees').then((res) =>{ setEmployees(res.data.data);
 console.log('projectres',res.data.data);}).catch(() => {
         
        
       });
-      api.get('/task/getCompanies').then((res) =>{ setCompanyList(res.data.data);
+      api.get('/project/getCompany').then((res) =>{ setCompanyList(res.data.data);
 console.log('companyres',res.data.data);}).catch(() => {
        
       })
@@ -99,24 +99,26 @@ console.log('teamres',res.data.data);}).catch(() => {
         <Col md={2}>
           <Input type="select" name="staff" value={filters.staff} onChange={handleFilterChange}>
             <option value="">Select Staff</option>
-            {staffList.map((s) => (
-              <option key={s.staff_id} value={s.staff_id}>{s.name}</option>
+            {employees.map((s) => (
+              <option key={s.employee_id} value={s.employee_id}>{s.first_name}</option>
             ))}
           </Input>
         </Col>
         <Col md={2}>
-          <Input type="select" name="due" value={filters.due} onChange={handleFilterChange}>
-            <option value="">Due</option>
-            <option value="today">Today</option>
-            <option value="this_week">This Week</option>
-            <option value="overdue">Overdue</option>
+          <Input type="select" name="status" value={filters.status} onChange={handleFilterChange}>
+            <option value="">Status</option>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
           </Input>
         </Col>
         <Col md={2}>
           <Input type="select" name="company" value={filters.company} onChange={handleFilterChange}>
             <option value="">Select Company</option>
             {companyList.map((c) => (
-              <option key={c.company_id} value={c.company_id}>{c.name}</option>
+              <option key={c.company_id} value={c.company_id}>{c.company_name}</option>
             ))}
           </Input>
         </Col>
@@ -128,24 +130,21 @@ console.log('teamres',res.data.data);}).catch(() => {
             ))}
           </Input>
         </Col>
-        <Col md={2}>
+        {/* <Col md={2}>
           <Input type="select" name="team" value={filters.team} onChange={handleFilterChange}>
             <option value="">Select Team</option>
             {teamList.map((t) => (
               <option key={t.team_id} value={t.team_id}>{t.name}</option>
             ))}
           </Input>
-        </Col>
-        <Col md={2}>
+        </Col> */}
+        {/* <Col md={2}>
           <Input type="select" name="specialSearch" value={filters.specialSearch} onChange={handleFilterChange}>
             <option value="">Special</option>
             <option value="my_tasks">My Tasks</option>
             <option value="high_priority">High Priority</option>
           </Input>
-        </Col>
-      </Row>
-
-      <Row className="mb-3">
+        </Col> */}
         <Col md={4}>
           <Input
             name="keyword"
@@ -154,13 +153,15 @@ console.log('teamres',res.data.data);}).catch(() => {
             onChange={handleFilterChange}
           />
         </Col>
+        </Row>
+        <Row className="mt-2">
         <Col md={8}>
           <Button color="primary" onClick={handleSearch}><i className="fa fa-search" /></Button>{' '}
-          <Button color="secondary"><i className="fa fa-print" /></Button>{' '}
-          <Button color="danger"><i className="fa fa-trash" /></Button>
+          {/* <Button color="secondary"><i className="fa fa-print" /></Button>{' '}
+          <Button color="danger"><i className="fa fa-trash" /></Button> */}
         </Col>
       </Row>
-
+<Row>
       <Table bordered hover size="sm" className="bg-white">
         <thead>
           <tr>
@@ -220,7 +221,7 @@ console.log('teamres',res.data.data);}).catch(() => {
           )}
         </tbody>
       </Table>
-
+</Row>
       <div className="d-flex justify-content-between px-2">
         <span>Total Records : {totalRecords}</span>
         <div>

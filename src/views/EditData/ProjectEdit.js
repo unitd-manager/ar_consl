@@ -45,6 +45,7 @@ const ProjectEdit = () => {
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
   const [employeeDetails, setEmployeeDetails] = useState();
+  const [staffs, setStaffs] = useState([]);
   const [incharge, setIncharge] = useState();
   const [update, setUpdate] = useState(false);
   const [quoteForm, setQuoteForm] = useState({
@@ -143,7 +144,14 @@ const ProjectEdit = () => {
       })
       .catch(() => {});
   };
-
+const getStaffById = () => {
+    api
+      .post('/project/getStaffByID', { project_id: id })
+      .then((res) => {
+        setStaffs(res.data.data);
+      })
+      .catch(() => {});
+  };
   const getEmployeeById = () => {
     api
       .post('/project/getEmployeeByID', { project_id: id })
@@ -180,6 +188,7 @@ const ProjectEdit = () => {
   const AddNewTask = () => {
     const newContactWithCompanyId = newTaskData;
     newContactWithCompanyId.project_id = id;
+    newContactWithCompanyId.company_id = projectDetail.company_id;
     console.log('taskto add', newContactWithCompanyId);
     if (newContactWithCompanyId.title && newContactWithCompanyId.due_date) {
       api
@@ -187,7 +196,7 @@ const ProjectEdit = () => {
         .then(() => {
           // const insertedDataId = res.data.data.insertId;
           message('Share inserted successfully.', 'success');
-        //window.location.reload();
+        window.location.reload();
       })
       .catch(() => {
         message('Network connection error.', 'error');
@@ -266,6 +275,7 @@ const ProjectEdit = () => {
     getTaskById();
     getEmployeeById();
     getIncharge();
+    getStaffById();
   }, [id]);
 
   return (
@@ -310,7 +320,9 @@ const ProjectEdit = () => {
               setEditTaskEditModals={setEditTaskEditModals}
               contactData={contactData}
               contact={contact}
+               incharge={incharge}
               employeeDetails={employeeDetails}
+              staffs={staffs}
             ></ProjectEditTaskModel>
           </TabPane>
           <TabPane tabId="2">

@@ -27,6 +27,7 @@ export default function ProjectTaskTab({
   AddNewTask,
   incharge,
   deleteRecordTask,
+  //staffs,
   employeeDetails,
 }) {
   ProjectTaskTab.propTypes = {
@@ -40,6 +41,7 @@ export default function ProjectTaskTab({
     AddNewTask: PropTypes.func,
     incharge: PropTypes.any,
     deleteRecordTask: PropTypes.any,
+    //staffs: PropTypes.any,
     employeeDetails: PropTypes.any,
   };
   //  Table Contact
@@ -131,6 +133,30 @@ export default function ProjectTaskTab({
                             </Input>
                           </FormGroup>
                         </Col>
+
+                        <Col md="4">
+                          <FormGroup>
+                            <Label>
+                              Task Type<span className="required">*</span>
+                            </Label>
+                            <Input
+                              type="select"
+                              onChange={(e) => {
+                                handleAddNewTask(e);
+                              }}
+                              value={newTaskData && newTaskData.type}
+                              name="type"
+                            >
+                              <option defaultValue="selected">Please Select</option>
+
+                              <option value="Development">Development</option>
+                              <option value="Maintainance">Maintainance</option>
+                              <option value="Support">Support</option>
+                            </Input>
+                          </FormGroup>
+                        </Col>
+                         </Row>
+                         <Row>
                         <Col md="4">
                           <FormGroup>
                             <Label>
@@ -156,8 +182,7 @@ export default function ProjectTaskTab({
                             </Input>
                           </FormGroup>
                         </Col>
-                      </Row>
-                      <Row>
+                     
                         <Col md="4">
                           <FormGroup>
                             <Label>
@@ -168,6 +193,19 @@ export default function ProjectTaskTab({
                               onChange={handleAddNewTask}
                               value={newTaskData && newTaskData.due_date}
                               name="due_date"
+                            />
+                          </FormGroup>
+                        </Col>
+                         <Col md="4">
+                          <FormGroup>
+                            <Label>
+                              Estimated Hours
+                            </Label>
+                            <Input
+                              type="text"
+                              name="estimat_hours"
+                              onChange={handleAddNewTask}
+                              value={newTaskData && newTaskData.estimated_hours}
                             />
                           </FormGroup>
                         </Col>
@@ -256,7 +294,7 @@ export default function ProjectTaskTab({
                         <Col md="4">
                           <FormGroup>
                             <Label>
-                              Employee Linked<span className="required"> *</span>
+                              Employee<span className="required"> *</span>
                             </Label>
                             <Input
                               type="select"

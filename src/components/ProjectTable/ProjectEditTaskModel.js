@@ -21,14 +21,14 @@ const ProjectEditTaskModel = ({
   contactData,
   editTaskEditModals,
   setEditTaskEditModals,
-  contact,
+  incharge,
   employeeDetails,
 }) => {
   ProjectEditTaskModel.propTypes = {
     contactData: PropTypes.object,
     editTaskEditModals: PropTypes.bool,
     setEditTaskEditModals: PropTypes.func,
-    contact: PropTypes.any,
+    incharge: PropTypes.any,
     employeeDetails: PropTypes.any,
   };
 
@@ -112,11 +112,12 @@ const ProjectEditTaskModel = ({
                   name="status"
                 >
                   <option defaultValue="selected">Please Select</option>
-                  <option value="Others">Others</option>
-                  <option value="Due">Due</option>
-                  <option value="Late">Late</option>
-                  <option value="Complete">Complete</option>
-                  <option value="Cancelled">Cancelled</option>
+
+                              <option value="Not Started">Not Started</option>
+                              <option value="In Progress">In Progress</option>
+                              <option value="Pending">Pending</option>
+                              <option value="Completed">Completed</option>
+                              <option value="Cancelled">Cancelled</option>
                 </Input>
               </FormGroup>
             </Col>
@@ -171,26 +172,26 @@ const ProjectEditTaskModel = ({
             </Col>
 
             <Col md="4">
-              <FormGroup>
-                <Label>Project Manager</Label>
-                <Input
-                  type="select"
-                  name="project_manager_id"
-                  onChange={handleInputs}
-                  value={taskinsert && taskinsert.project_manager_id}
-                >
-                  <option value="selected">Please Select</option>
-                  {contact &&
-                    contact.map((ele) => {
-                      return (
-                        <option key={ele.contact_id} value={ele.first_name}>
-                          {ele.first_name}
-                        </option>
-                      );
-                    })}
-                </Input>
-              </FormGroup>
-            </Col>
+                                      <FormGroup>
+                                        <Label>Project Manager</Label>
+                                        <Input
+                                          type="select"
+                                          name="project_manager_id"
+                                        onChange={handleInputs}
+                                          value={taskinsert && taskinsert.project_manager_id}
+                                        >
+                                          <option value="selected">Please Select</option>
+                                         {incharge &&
+                                  incharge.map((ele) => {
+                                    return (
+                                      <option value={ele.employee_id} key={ele.first_name}>
+                                      {ele.first_name}
+                                    </option>
+                                    );
+                                  })}
+                                        </Input>
+                                      </FormGroup>
+                                    </Col>
           </Row>
           <Row>
             <Col md="4">
