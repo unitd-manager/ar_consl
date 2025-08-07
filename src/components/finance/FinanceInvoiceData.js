@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useState,useEffect } from 'react';
 import {
   Row,
@@ -92,7 +93,7 @@ const handleLineItemChange = (index, field, value) => {
   const qty = parseFloat(updatedItems[index].qty) || 0;
   const unitPrice = parseFloat(updatedItems[index].unit_price) || 0;
   updatedItems[index].total_cost = (qty * unitPrice).toFixed(2);
-
+  console.log('lineItem', updatedItems);
   setAddLineItem(updatedItems);
 };
 
@@ -102,7 +103,7 @@ const handleLineItemChange = (index, field, value) => {
     api
       .post('/Finance/insertInvoiceItem', obj)
       .then(() => {
-         window.location.reload();
+         //window.location.reload();
         message('Line Item Added Successfully', 'sucess');
       })
       .catch(() => {
@@ -118,12 +119,16 @@ const handleLineItemChange = (index, field, value) => {
     description:el.description,
     invoice_id: receipt,
     total_cost:el.total_cost,
+    qty:el.qty,
+    unit_price:el.unit_price,
     item_title:el.item_title,
     item_code: projectInfo.item_code,
   
   });
+ 
 }
-    })
+    }) 
+    window.location.reload();
     // for (let j = 0; j < results.length; j++) {
     //   if(results[j].item_title !==''){
     //   addLineItemApi({
@@ -155,6 +160,7 @@ const handleLineItemChange = (index, field, value) => {
       createInvoice.invoice_due_date = current;
     }
     console.log('results',results)
+        console.log('createInvoice',createInvoice)
     api
       .post('/Finance/insertInvoice', createInvoice)
       .then((res) => {
@@ -211,7 +217,7 @@ const handleLineItemChange = (index, field, value) => {
       result.push(allValues);
     });
     
-    console.log(result);
+    console.log('result',result);
     
     result.forEach((e) => {
       if (e.total_cost) {

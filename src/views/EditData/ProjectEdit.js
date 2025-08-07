@@ -181,16 +181,20 @@ const ProjectEdit = () => {
     const newContactWithCompanyId = newTaskData;
     newContactWithCompanyId.project_id = id;
     console.log('taskto add', newContactWithCompanyId);
-    api
-      .post('/project/insertTask', newContactWithCompanyId)
-      .then(() => {
-        // const insertedDataId = res.data.data.insertId;
-        message('Share inserted successfully.', 'success');
+    if (newContactWithCompanyId.title && newContactWithCompanyId.due_date) {
+      api
+        .post('/project/insertTask', newContactWithCompanyId)
+        .then(() => {
+          // const insertedDataId = res.data.data.insertId;
+          message('Share inserted successfully.', 'success');
         //window.location.reload();
       })
       .catch(() => {
         message('Network connection error.', 'error');
-      });
+      });}
+      else {
+        message('Please fill all required fields.', 'error');
+      }
   };
 
   //Contact Functions/Methods
