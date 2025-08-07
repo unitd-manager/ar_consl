@@ -6,6 +6,7 @@ import { Button } from 'reactstrap';
 //import { useParams } from 'react-router-dom';
 import Converter from 'number-to-words';
 import moment from 'moment';
+import PdfHeader from './PdfHeader';
 import api from '../../constants/api';
 import message from '../Message';
 
@@ -17,6 +18,7 @@ const PdfCreateInvoice = ({ invoiceId }) => {
     invoiceId: PropTypes.any,
   };
 
+  const [hfdata, setHeaderFooterData] = React.useState();
   const [cancelInvoice, setCancelInvoice] = React.useState([]);
   const [createInvoice, setCreateInvoice] = React.useState(null);
   const [Total, setTotal] = React.useState(0);
@@ -32,7 +34,10 @@ const PdfCreateInvoice = ({ invoiceId }) => {
       message('Invoice Data Not Found', 'info');
     });
 };
-
+const findCompany = (key) => {
+    const filteredResult = hfdata.find((e) => e.key_text === key);
+    return filteredResult.value;
+  };
 
   const getInvoiceItemById = () => {
     api.post('/invoice/getProjectInvoicePdf', { invoice_id: invoiceId })
@@ -49,7 +54,11 @@ const PdfCreateInvoice = ({ invoiceId }) => {
     getInvoiceItemById();
     getInvoiceById();
   }, []);
-
+React.useEffect(() => {
+    api.get('/setting/getSettingsForCompany').then((res) => {
+      setHeaderFooterData(res.data.data);
+    });
+  }, []);
   const GetPdf = () => {
     const productItems = [
       [
@@ -73,6 +82,8 @@ const PdfCreateInvoice = ({ invoiceId }) => {
 
     const dd = {
       pageSize: 'A4',
+      header: PdfHeader({ findCompany }),
+      pageMargins: [40, 150, 40, 80],
       content: [
         {
           table: {

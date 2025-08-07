@@ -72,6 +72,7 @@ export default function CustomerFinanceInvoice({
                   createInvoice = {createInvoice}
                   cancelInvoice = {cancelInvoice}
                   invoiceId = {element.invoice_id}
+                  
                  ></PdfCreateInvoice>
          
                        </td>
