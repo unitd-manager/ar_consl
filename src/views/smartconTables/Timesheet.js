@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState, useEffect } from 'react';
 import * as Icon from 'react-feather';
-import {Button } from 'reactstrap';
-import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -10,20 +8,25 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
-import 'react-data-table-component-extensions/dist/index.css';
 import { Link } from 'react-router-dom';
-import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
+import api from '../../constants/api';
 
-function Timesheet() {
-  const [timeSheet, setTimeSheet] = useState(null);
-  const getTimeSheet = () => {
-    api.get('/timesheet/getTimeSheet').then((res) => {
-      setTimeSheet(res.data.data);
-      console.log(res.data.data);
-    });
-  };
+const SmartAttendance = () => {
+
+const [data, setData] = useState([]);
+
+const getAttendance = () => {
+  api
+  .get('/attendance/getAllEmployeeData')
+  .then(res => {
+    setData(res.data.data);
+  })
+  .catch(() => {
+    alert('Network connection error.');
+  });
+};
 
   useEffect(() => {
     setTimeout(() => {
@@ -42,107 +45,61 @@ function Timesheet() {
       });
     }, 1000);
 
-    getTimeSheet();
+    getAttendance();
   }, []);
 
+  
   const columns = [
     {
-      name: 'Staff Id',
-      selector: 'staff_id',
+      name: 'id',
+      selector: 'opportunity_id',
       grow: 0,
       wrap: true,
       width: '4%',
     },
     {
-      name: 'Edit',
-      selector: 'edit',
-      cell: () => <Icon.Edit2 />,
+      name: 'View',
+      selector: 'view',
+      cell: () => <Icon.Eye />,
       grow: 0,
       width: 'auto',
       button: true,
       sortable: false,
     },
     {
-      name: 'Del',
-      selector: 'delete',
-      cell: () => <Icon.Trash />,
+      name: 'Employee Name',
+      selector: 'emp_name',
+      sortable: true,
       grow: 0,
-      width: 'auto',
       wrap: true,
     },
     {
-      name: 'Staff',
-      selector: 'staff_name',
+      name: 'Project Name',
+      selector: 'title',
       sortable: true,
       grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Staff Id',
+      selector: 'staff_id',
+      sortable: true,
+      grow: 2,
       wrap: true,
     },
     {
       name: 'Date',
-      selector: 'creation_date',
-      sortable: true,
-      grow: 2,
-      wrap: true,
-    },
-    {
-      name: 'Time In',
-      selector: 'time_in',
-      sortable: true,
-      grow: 0,
-    },
-    {
-      name: 'Time Out',
-      selector: 'leave_time',
+      selector: 'date',
       sortable: true,
       width: 'auto',
-      grow: 3,
-      // cell: d => <span>{d.closing.join(", ")}</span>
-    },
-    {
-      name: 'On Leave',
-      selector: 'on_leave',
-      sortable: true,
-      grow: 2,
-      width: 'auto',
-      // cell: d => <span>{d.closing.join(", ")}</span>
     },
   ];
-
-  const deleteRecord = (id) => {
-    Swal.fire({
-      title: `Are you sure? ${id}`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api.post('/timesheet/deleteAttendance', { attendance_id: id }).then((res) => {
-          console.log(res);
-          Swal.fire('Deleted!', 'Your Timesheet has been deleted.', 'success');
-          getTimeSheet();
-        });
-      }
-    });
-  };
-
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
 
-        <CommonTable
-          title="Timesheet List"
-          Button={
-            <Link to="/TenderDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
-              </Button>
-            </Link>
-          }
-        >
+        <CommonTable title="Timesheet List">
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -151,36 +108,29 @@ function Timesheet() {
             </tr>
           </thead>
           <tbody>
-            {timeSheet &&
-              timeSheet.map((element) => {
+          {data &&
+              data.map((ele) => {
                 return (
-                  <tr key={element.staff_id}>
-                    <td>{element.staff_id}</td>
+                  <tr key={ele.id}>
+                    <td>{ele.id}</td>
                     <td>
-                      <Link to={`/TimesheetEdit/${element.staff_id}`}>
+                      <Link to={`/TimesheetEdit/${ele.id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>
-                      <Link to="">
-                        <span onClick={() => deleteRecord(element.staff_id)}>
-                          <Icon.Trash2 />
-                        </span>
-                      </Link>
-                    </td>
-                    <td>{element.staff_name}</td>
-                    <td>{element.creation_date}</td>
-                    <td>{element.time_in}</td>
-                    <td>{element.leave_time}</td>
-                    <td>{element.on_leave}</td>
+                    <td>{ele.first_name}</td>
+                    <td>{ele.title}</td>
+                    <td>{ele.staff_id}</td>
+                    <td>{ele.date}</td>
                   </tr>
                 );
               })}
           </tbody>
+         
         </CommonTable>
       </div>
     </div>
   );
-}
+};
 
-export default Timesheet;
+export default SmartAttendance;
