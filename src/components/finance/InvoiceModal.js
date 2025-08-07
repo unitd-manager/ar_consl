@@ -41,6 +41,8 @@ const InvoiceModal = ({ editInvoiceModal, editModal, setEditModal,invoiceDatas }
   const [conditions, setConditions] = useState('');
   const [invoiceData, setInvoiceData] = useState(invoiceDatas);
 
+  const [gstValue, setGstValue] = useState();
+  const gstPercentageValue = parseInt(gstValue?.value, 10) || 0; 
   // const [invoiceData, setInvoiceData] = useState({});
   // const { id } = useParams();
   //Add Line Item
@@ -120,6 +122,13 @@ const [addLineItem, setAddLineItem] = useState([{
   const editInvoice = () => {
     //invoiceData.invoice_amount = totalAmount + (7 / 100) * totalAmount;
     // invoiceData.order_id = id;
+     let totalValue=0;
+     addLineItem.forEach((e) => {
+      if (e.total_cost) {
+        totalValue += parseFloat(e.total_cost);
+      }
+    }); 
+    invoiceData.invoice_amount = totalValue + (gstPercentageValue / 100) * totalValue;
     api
       .post('/finance/editInvoicePortalDisplay', invoiceData)
       .then(() => {
@@ -133,16 +142,27 @@ const [addLineItem, setAddLineItem] = useState([{
   //editlineitem
   const editLineItemApi = () => {
     // invoiceData.invoice_id = id;
+    addLineItem.forEach((item) => {
+      //item.invoice_id = id;
+   
     api
-      .post('/finance/editInvoiceItem', addLineItem)
+      .post('/finance/editInvoiceItem', item)
       .then(() => {
         message('Line Item Edited Successfully', 'sucess');
       })
       .catch(() => {
         message('Cannot Edit Line Items', 'error');
       });
+       });
   };
-
+ const getGstValue = () => {
+    api.get('/finance/getGst').then((res) => {
+      setGstValue(res.data.data);
+      });
+  };
+  useEffect(() => {
+    getGstValue();
+  }, []);
  console.log('amountInvoice',addLineItem)
   useEffect(() => {
     getLineItem();
