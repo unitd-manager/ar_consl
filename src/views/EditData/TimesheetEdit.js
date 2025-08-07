@@ -1,227 +1,178 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Row, Col, Button, TabPane, TabContent } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import '../form-editor/editor.scss';
-import moment from 'moment';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
-import message from '../../components/Message';
-import api from '../../constants/api';
 import ComponentCardV2 from '../../components/ComponentCardV2';
-import ApiButton from '../../components/ApiButton';
+import message from '../../components/Message';
+import Tab from '../../components/Project/Tab';
+import api from '../../constants/api';
+import AttendanceDetails from '../../components/AttendanceTable/AttendanceDetails';
 
-const TimesheetEdit = () => {
-  const [timesheetDetails, setPurchaseOrderDetails] = useState();
-  const [staffLinked, setStaffLinked] = useState();
+const SmartAttendanceEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const handleInputs = (e) => {
-    setPurchaseOrderDetails({ ...timesheetDetails, [e.target.name]: e.target.value });
+  const backToList = () => {
+    navigate('/Timesheet');
   };
-  const getStaff = () => {
-    api.get('/timesheet/getStaff', staffLinked).then((res) => {
-      setStaffLinked(res.data.data);
-    });
+
+  const [activeTab, setActiveTab] = useState('1');
+  const tabs = [
+    { id: '1', name: 'Day CheckIn' },
+    { id: '2', name: 'Day CheckOut' },
+    { id: '3', name: 'Night CheckIn' },
+    { id: '4', name: 'Night CheckOut' },
+  ];
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
   };
-  const editPurchaseOrderById = () => {
+
+  const [attendanceDetails, setAttendanceDetails] = useState();
+
+  // Get Attendance By Id
+
+  const getAttendanceById = () => {
     api
-      .post('/timesheet/getTimeSheetByAttendanceId', { attendance_id: id })
+      .post('/attendance/getAttendanceDataById', { id })
       .then((res) => {
-        setPurchaseOrderDetails(res.data.data[0]);
-        console.log(res.data.data[0]);
+        setAttendanceDetails(res.data.data);
       })
       .catch(() => {
-        message('Purchase Order Data Not Found', 'info');
+        message('Network connection error.', 'error');
       });
   };
-  const editTimesheetData = () => {
-    api
-    .post('/timesheet/editTimeSheet', timesheetDetails)
-    .then(() => {
-      message('Record edited successfully', 'success');
-    })
-    .catch(() => {
-      message('Unable to edit record.', 'error');
-    });
-  }
+
   useEffect(() => {
-    editPurchaseOrderById();
-    getStaff();
+    getAttendanceById();
   }, [id]);
-  const backToList = () => {
-    navigate('/Leave');
-  };
+
+  const dayCheckInLatitude = attendanceDetails?.day_checkIn_latitude;
+  const dayCheckInLongitude = attendanceDetails?.day_checkIn_longitude;
+  const dayCheckIn =
+    dayCheckInLatitude || dayCheckInLongitude
+      ? `https://maps.google.com/maps?q=${dayCheckInLatitude},${dayCheckInLongitude}&hl=es;&output=embed`
+      : '';
+
+  const dayCheckOutLatitude = attendanceDetails?.day_checkOut_latitude;
+  const dayCheckOutLongitude = attendanceDetails?.day_checkOut_longitude;
+  const dayCheckOut =
+    dayCheckOutLatitude || dayCheckOutLongitude
+      ? `https://maps.google.com/maps?q=${dayCheckOutLatitude},${dayCheckOutLongitude}&hl=es;&output=embed`
+      : '';
+
+  const nightCheckInlatitude = attendanceDetails?.night_checkIn_latitude;
+  const nightCheckInlongitude = attendanceDetails?.night_checkIn_longitude;
+  const nightCheckIn =
+    nightCheckInlatitude || nightCheckInlongitude
+      ? `https://maps.google.com/maps?q=${nightCheckInlatitude},${nightCheckInlongitude}&hl=es;&output=embed`
+      : '';
+
+  const nightCheckOutLatitude = attendanceDetails?.night_checkOut_latitude;
+  const nightCheckOutLongitude = attendanceDetails?.night_checkOut_longitude;
+  const nightCheckOut =
+    nightCheckOutLatitude || nightCheckOutLongitude
+      ? `https://maps.google.com/maps?q=${nightCheckOutLatitude},${nightCheckOutLongitude}&hl=es;&output=embed`
+      : '';
 
   return (
     <>
-      <BreadCrumbs heading={timesheetDetails && timesheetDetails.staff_id} />
+      <BreadCrumbs />
+      <ComponentCardV2>
+        <Row>
+          <Col>
+            <Button
+              className="shadow-none"
+              color="dark"
+              onClick={() => {
+                backToList();
+              }}
+            >
+              {' '}
+              Back to List{' '}
+            </Button>
+          </Col>
+        </Row>
+      </ComponentCardV2>
 
-      <Form>
-        <FormGroup>
-        <ComponentCardV2>
-        <ApiButton  editData={editTimesheetData}
-        navigate={navigate}
-        applyChanges={editTimesheetData}
-        backToList={backToList} module="Timesheet"></ApiButton>
-         
-          </ComponentCardV2>
-          <ComponentCard
-            title="Details"
-          >
-            <Row>
-             <Col md="3">
-                <FormGroup>
-                  <Label>Staff</Label>
-                  <Input type="select" name="staff_id" value={timesheetDetails && timesheetDetails.staff_id} onChange={handleInputs}>
-                    <option value="" selected="selected">
-                      Please Select
-                    </option>
-                    {staffLinked && staffLinked.map((ele) => {
-                        return (
-                          <option value={ele.staff_id}>{ele.staff_name}</option>
-                        );})}
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Date</Label>
-                  <Input
-                    type="date"
-                    onChange={handleInputs}
-                    value={timesheetDetails && moment(timesheetDetails.creation_date).format('YYYY-MM-DD')}
-                    name="creation_date"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> On Leave</Label>
-                  <br></br>
-                  <Label> Yes </Label>
-                  <Input name="on_leave" value="1" type="radio" defaultChecked={timesheetDetails && timesheetDetails.show_title === 1 && true} onChange={handleInputs}/>
-                  <Label> No </Label>
-                  <Input name="on_leave" value="0" type="radio" defaultChecked={timesheetDetails && timesheetDetails.show_title === 0 && true} onChange={handleInputs}/>
-                </FormGroup>
-              </Col>                
+      <AttendanceDetails attendanceDetails={attendanceDetails} />
 
-              <Col md="3">
-                <FormGroup>
-                  <Label>Type Of Leave</Label>
-                  <Input
-                    value={timesheetDetails && timesheetDetails.type_of_leave}
-                    type="select"
-                    onChange={handleInputs}
-                    name="type_of_leave"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="earning leave">Earning Leave</option>
-                    <option value="sick leave">Sick Leave</option>
-                    <option value="loss of pay">Loss of Pay</option>
-                  </Input>
-                </FormGroup>
-              </Col>
-              </Row>
-            <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Latitude</Label>
-                  <Input
-                    value={timesheetDetails && timesheetDetails.latitude}
-                    type="text"
-                    onChange={handleInputs}
-                    name="latitude"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Longitude</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={timesheetDetails && timesheetDetails.longitude}
-                    name="longitude"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Notes</Label>
-                  <Input
-                    type="textarea"
-                    value={timesheetDetails && timesheetDetails.notes}
-                    onChange={handleInputs}
-                    name="notes"
-                  />
-                </FormGroup>
-              </Col>
+      <ComponentCard title="Location">
+        <Tab toggle={toggle} tabs={tabs} />
+
+        <TabContent className="p-4" activeTab={activeTab}>
           
-              <Col md="3">
-                <FormGroup>
-                  <Label>Time in (HH:MM)</Label>
-                  <Input
-                    type="textarea"
-                    value={timesheetDetails && timesheetDetails.time_in}
-                    onChange={handleInputs}
-                    name="time_in"
-                  />
-                </FormGroup>
-              </Col>
-                </Row>
-            <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Time out (HH:MM)</Label>
-                  <Input
-                    type="textarea"
-                    value={timesheetDetails && timesheetDetails.leave_time}
-                    onChange={handleInputs}
-                    name="leave_time"
-                  />
-                </FormGroup>
-              </Col>              
-              <Col md="3">
-                <FormGroup>
-                  <Label>Description</Label>
-                  <Input
-                    type="textarea"
-                    value={timesheetDetails && timesheetDetails.description}
-                    onChange={handleInputs}
-                    name="description"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Created By</Label>
-                  <Input
-                    type="text"
-                    value={timesheetDetails && timesheetDetails.created_by}
-                    onChange={handleInputs}
-                    name="created_by"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Modified By</Label>
-                  <Input
-                    type="text"
-                    value={timesheetDetails && timesheetDetails.modified_by}
-                    onChange={handleInputs}
-                    name="modified_by"
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-          </ComponentCard>
-        </FormGroup>
-      </Form>
+          {dayCheckIn ? (
+            <TabPane tabId="1">
+              <iframe
+                title="Google Map"
+                src={dayCheckIn}
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </TabPane>
+          ) : (
+            ' '
+          )}
+
+          {dayCheckOut ? (
+            <TabPane tabId="2">
+              <iframe
+                title="Google Map"
+                src={dayCheckOut}
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </TabPane>
+          ) : (
+            ''
+          )}
+
+          {nightCheckIn ? (
+            <TabPane tabId="3">
+              <iframe
+                title="Google Map"
+                src={nightCheckIn}
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </TabPane>
+          ) : (
+            ' '
+          )}
+
+          {nightCheckOut ? (
+            <TabPane tabId="4">
+              <iframe
+                title="Google Map"
+                src={nightCheckOut}
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </TabPane>
+          ) : (
+            ''
+          )}
+        </TabContent>
+      </ComponentCard>
     </>
   );
 };
-
-export default TimesheetEdit;
+export default SmartAttendanceEdit;

@@ -43,7 +43,7 @@ function AttendanceDetails({ attendanceDetails }) {
     console.log("nightCheckInDuration",nightCheckInDuration)
 
   return (
-    <ComponentCard title="Attendance Details">
+    <ComponentCard title="Timesheet Details">
       <Row>
         <Col md="3">
           <FormGroup>
