@@ -85,14 +85,14 @@ React.useEffect(() => {
       header: PdfHeader({ findCompany }),
       pageMargins: [40, 150, 40, 80],
       content: [
-        {
-          table: {
-            headerRows: 1,
-            widths: ['100%'],
-            body: [[{ text: `TAX INVOICE`, alignment: 'center', style: 'tableHead' }]],
-          },
-          layout: 'noBorders',
-        },
+        // {
+        //   table: {
+        //     headerRows: 1,
+        //     widths: ['100%'],
+        //     body: [[{ text: `TAX INVOICE`, alignment: 'center', style: 'tableHead' }]],
+        //   },
+        //   layout: 'noBorders',
+        // },
         '\n',
         {
   columns: [
