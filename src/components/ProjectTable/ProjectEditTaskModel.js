@@ -263,7 +263,7 @@ const ProjectEditTaskModel = ({
                   {employeeDetails &&
                     employeeDetails.map((ele) => {
                       return (
-                        <option key={ele.employee_id} value={ele.first_name}>
+                        <option key={ele.employee_id} value={ele.employee_id}>
                           {ele.first_name}
                         </option>
                       );
